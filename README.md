@@ -45,6 +45,14 @@ pip install -r requirements.txt # requirements/dev.txt for development or requir
 
 ### run the app
 
+before running the app, you should populate the database with network, stations and parameters data:
+
+```
+python3 run.py app -p
+```
+
+you can then start the development server:
+
 ```
 python3 run.py app
 ```
