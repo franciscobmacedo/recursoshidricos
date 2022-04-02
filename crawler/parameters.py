@@ -1,9 +1,9 @@
 from typing import List
 
 from bs4 import BeautifulSoup
+from common.schemas import Parameter
 
 from crawler.base import BaseCrawler
-from common.schemas import Parameter
 
 
 class Parameters(BaseCrawler):

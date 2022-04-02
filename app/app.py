@@ -1,16 +1,14 @@
 from typing import List, Optional
 
+from common import schemas
+from common.utils import parse_datetime
+from crawler.data import GetData
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app import crud, get_db
-from common import schemas
-from crawler.data import GetData
-
-from common.utils import parse_datetime
 
 description = """
 💧💧💧 access [SNIRH](https://snirh.apambiente.pt/) data  

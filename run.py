@@ -1,6 +1,7 @@
-from email.policy import default
-import uvicorn
 import argparse
+
+import uvicorn
+
 import crawler
 from app.workflow import populate_database
 

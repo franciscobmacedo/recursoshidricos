@@ -1,21 +1,21 @@
-from typing import Union
-from .networks import Networks
-from .stations import Stations
-from .parameters import Parameters
-from .data import GetData
-from pprint import pprint
 import json
-import os
+from pprint import pprint
+from typing import Union
 
-from common.utils import parse_datetime
 from common.settings import (
+    DATA_FILE,
+    NETWORKS_FILE,
+    PARAMETERS_FILE,
+    STATIONS_FILE,
     bcolors,
     create_data_dir,
-    NETWORKS_FILE,
-    STATIONS_FILE,
-    PARAMETERS_FILE,
-    DATA_FILE,
 )
+from common.utils import parse_datetime
+
+from .data import GetData
+from .networks import Networks
+from .parameters import Parameters
+from .stations import Stations
 
 
 def dump(filename: str, data: Union[list, dict, str]):

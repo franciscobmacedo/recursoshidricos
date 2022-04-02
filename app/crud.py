@@ -1,9 +1,9 @@
 from typing import Optional
 
+from common import schemas
 from sqlalchemy.orm import Session
 
 from app import models
-from common import schemas
 
 
 def get_networks(db: Session, skip: int = 0, limit: int = 100):

@@ -1,11 +1,11 @@
 import datetime
 
+import pandas as pd
 from bs4 import BeautifulSoup
-
-from crawler.base import BaseCrawler
 from common.schemas import DataEntryList
 from common.utils import parse_datetime
-import pandas as pd
+
+from crawler.base import BaseCrawler
 
 
 class GetData(BaseCrawler):

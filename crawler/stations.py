@@ -1,10 +1,10 @@
 from typing import List
 
 from bs4 import BeautifulSoup
+from common.schemas import Station
 
 from crawler.base import BaseCrawler
 from crawler.networks import Networks
-from common.schemas import Station
 
 
 class Stations(BaseCrawler):

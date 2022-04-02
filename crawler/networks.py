@@ -1,9 +1,9 @@
 from typing import List
 
 from bs4 import BeautifulSoup
+from common.schemas import Network
 
 from crawler.base import BaseCrawler
-from common.schemas import Network
 
 
 class Networks(BaseCrawler):
