@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import crawler
 
@@ -6,7 +7,9 @@ from tests import expected_responses
 
 
 def open_mock_response(file):
-    with open(f"tests/mock_data/{file}", "r") as f:
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    with open(f"{dir_path}/mock_data/{file}", "r") as f:
         mock_respnse = f.read()
     return mock_respnse
 
