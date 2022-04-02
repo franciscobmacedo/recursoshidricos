@@ -81,7 +81,8 @@ python3 run.py api -p
 
 2 - edit `docker-compose.prod.yml` traefik domain settings with your domain.
 
-2 - build and run for production
+3 - add `.env` file in the main directory (copy from .env.dev)
+4 - build and run for production
 
 ```bash
 docker-compose -f docker-compose.prod.yml up -d --build
