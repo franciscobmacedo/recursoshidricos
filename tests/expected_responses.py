@@ -1,8 +1,8 @@
-import schemas
+from common import schemas
 
 networks = [
-    schemas.Network(id="458192970", name="ETA"),
-    schemas.Network(id="920123705", name="Hidrométrica"),
+    schemas.Network(id="458192970", nome="ETA"),
+    schemas.Network(id="920123705", nome="Hidrométrica"),
 ]
 
 
@@ -92,9 +92,9 @@ stations = [
 
 
 parameters = [
-    schemas.Parameter(id="1843", name="Nível hidrométrico Instantâneo"),
-    schemas.Parameter(id="436115734", name="Nível instantâneo máximo anual"),
-    schemas.Parameter(id="1845", name="Nível médio diário"),
+    schemas.Parameter(id="1843", nome="Nível hidrométrico Instantâneo"),
+    schemas.Parameter(id="436115734", nome="Nível instantâneo máximo anual"),
+    schemas.Parameter(id="1845", nome="Nível médio diário"),
 ]
 
 

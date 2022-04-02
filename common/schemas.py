@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel, validator
@@ -25,15 +24,16 @@ class StationState:
 
 class Network(BaseModel):
     id: str
-    name: str
+    nome: str
 
-    @validator("name")
-    def validate_optional_str_fields(cls, name: str) -> str:
-        return name.strip("*").strip(" ")
+    @validator("nome")
+    def validate_optional_str_fields(cls, nome: str) -> str:
+        return nome.strip("*").strip(" ")
 
     class Config:
-        schema_extra = {"example": {"id": "920123705", "name": "Hidrométrica"}}
+        schema_extra = {"example": {"id": "920123705", "nome": "Hidrométrica"}}
         orm_mode = True
+
 
 class Station(BaseModel):
     id: str
@@ -108,15 +108,15 @@ class Station(BaseModel):
 
 class Parameter(BaseModel):
     id: str
-    name: str
+    nome: str
 
-    @validator("name")
-    def validate_optional_str_fields(cls, name: str) -> str:
-        return name.strip("*").strip(" ")
+    @validator("nome")
+    def validate_optional_str_fields(cls, nome: str) -> str:
+        return nome.strip("*").strip(" ")
 
     class Config:
         orm_mode = True
-        schema_extra = {"example": {"id": "1849", "name": "Escoamento mensal"}}
+        schema_extra = {"example": {"id": "1849", "nome": "Escoamento mensal"}}
 
 
 class DataEntry(BaseModel):

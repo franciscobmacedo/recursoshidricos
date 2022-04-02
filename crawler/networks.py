@@ -3,7 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup
 
 from crawler.base import BaseCrawler
-from schemas import Network
+from common.schemas import Network
 
 
 class Networks(BaseCrawler):
@@ -15,5 +15,5 @@ class Networks(BaseCrawler):
         soup = BeautifulSoup(res.text, "html.parser")
         networks = soup.find("select", {"name": "f_redes_todas[]"})
         return [
-            Network(id=n["value"], name=n.text) for n in networks.find_all("option")
+            Network(id=n["value"], nome=n.text) for n in networks.find_all("option")
         ]

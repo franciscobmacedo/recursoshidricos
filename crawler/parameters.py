@@ -3,7 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup
 
 from crawler.base import BaseCrawler
-from schemas import Parameter
+from common.schemas import Parameter
 
 
 class Parameters(BaseCrawler):
@@ -12,6 +12,6 @@ class Parameters(BaseCrawler):
 
         soup = BeautifulSoup(res.text, "html.parser")
         return [
-            Parameter(id=o["value"], name=o.text.replace("■", "").strip())
+            Parameter(id=o["value"], nome=o.text.replace("■", "").strip())
             for o in soup.find_all("option")
         ]

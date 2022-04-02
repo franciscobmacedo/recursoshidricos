@@ -3,8 +3,8 @@ import datetime
 from bs4 import BeautifulSoup
 
 from crawler.base import BaseCrawler
-from schemas import DataEntryList
-from utils import parse_datetime
+from common.schemas import DataEntryList
+from common.utils import parse_datetime
 import pandas as pd
 
 
@@ -28,8 +28,12 @@ class GetData(BaseCrawler):
         soup = BeautifulSoup(res.text, "html.parser")
         data_table = soup.find_all("table")[-1]
         df = pd.read_html(str(data_table))[0]
-        df.columns = ["timestamp", "value"]
         df = df.iloc[2:]
+        print(df)
+        if df.empty:
+            return DataEntryList(__root__=[])
+
+        df.columns = ["timestamp", "value"]
         df.timestamp = df.timestamp.apply(
             lambda x: parse_datetime(x.strip(), format="%d/%m/%Y %H:%M")
         )

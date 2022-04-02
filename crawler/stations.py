@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 from crawler.base import BaseCrawler
 from crawler.networks import Networks
-from schemas import Station
+from common.schemas import Station
 
 
 class Stations(BaseCrawler):
