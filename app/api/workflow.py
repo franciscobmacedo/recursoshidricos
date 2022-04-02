@@ -1,4 +1,4 @@
-from app import crud, get_db
+from api import crud, get_db
 
 
 def populate_database(replace):

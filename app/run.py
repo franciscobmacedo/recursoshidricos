@@ -3,11 +3,11 @@ import argparse
 import uvicorn
 
 import crawler
-from app.workflow import populate_database
+from api.workflow import populate_database
 
 
 class Mode:
-    app = "app"
+    api = "api"
     crawler = "crawler"
 
 
@@ -18,17 +18,17 @@ class CrawlerType:
     data = "data"
 
 
-def run_app():
-    uvicorn.run("app.app:app", reload=True, debug=True, host="0.0.0.0", port=5001)
+def run_api():
+    uvicorn.run("api.main:app", reload=True, debug=True, host="0.0.0.0", port=8000)
 
 
 class Run:
     def __init__(self) -> None:
         parser = argparse.ArgumentParser(description="snirh crawler and api.")
         subparsers = parser.add_subparsers(
-            help='set the run mode: "app" or "crawler"', required=True, dest="run_mode"
+            help='set the run mode: "api" or "crawler"', required=True, dest="run_mode"
         )
-        self.app_parser = subparsers.add_parser(Mode.app, help="run the app")
+        self.api_parser = subparsers.add_parser(Mode.api, help="run the api")
         self.crawler_parser = subparsers.add_parser(
             Mode.crawler, help="run the crawler with extra arguments"
         )
@@ -45,18 +45,18 @@ class Run:
             ],
         )
 
-        self.app_parser.add_argument(
+        self.api_parser.add_argument(
             "-p",
             "--populate_database",
-            help="populate app database",
+            help="populate api database",
             action="store_true",
         )
 
         args, _ = parser.parse_known_args()
-        if args.run_mode == Mode.app:
+        if args.run_mode == Mode.api:
             if args.populate_database:
                 populate_database(True)
-            run_app()
+            run_api()
 
         elif args.CrawlerType == CrawlerType.networks:
             crawler.dump_networks()

@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
-from app import crud, get_db
+from api import crud, get_db
 
 description = """
 💧💧💧 access [SNIRH](https://snirh.apambiente.pt/) data  

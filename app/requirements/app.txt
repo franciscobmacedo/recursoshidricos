@@ -1,0 +1,5 @@
+fastapi==0.75.0
+uvicorn==0.17.6
+SQLAlchemy==1.4.34
+python-environ==0.4.54
+psycopg2==2.9.3
