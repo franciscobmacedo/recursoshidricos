@@ -14,14 +14,32 @@ running at https://snirhapi.herokuapp.com/
 - Provide access to the data in an easy and standard format, through a REST API.
 - On top of this API, a frontend modern application can be easily built.
 
-## Development
+## Structure
 
 This project consists of 2 main blocks:
 
 - [**Crawler**](crawler) - fetches the data and transforms it into standart python formats.
 - [**App**](app) - uses the fetched data and creates a RESTFull API interface for easy access.
 
-### Setup in your local machine
+# Setup for development
+
+## with docker
+
+build and run for development
+
+```bash
+docker-compose up -d --build
+```
+
+the api server will be available in http://localhost:8000
+
+You should populate the database with network, stations and parameters data:
+
+```bash
+docker exec -it re-snirh_backend_1 python3 run.py api -p
+```
+
+## without docker
 
 _WINDOWS_
 
@@ -30,7 +48,7 @@ git clone https://github.com/franciscobmacedo/snirhAPI
 cd  snirhAPI
 py -m venv venv
 .\venv\scripts\activate
-pip install -r requirements.txt # requirements/dev.txt for development or requirements/common.txt for just the crawler
+pip install -r requirements/dev.txt # requirements/dev.txt for development or requirements/common.txt for just the crawler
 ```
 
 _MAC/LINUX_
@@ -40,24 +58,42 @@ git clone https://github.com/franciscobmacedo/snirhAPI
 cd  snirhAPI
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt # requirements/dev.txt for development or requirements/common.txt for just the crawler
+pip install -r requirements/dev.txt # requirements/dev.txt for development or requirements/common.txt for just the crawler
 ```
 
-### run the app
+you can then run the api:
 
-before running the app, you should populate the database with network, stations and parameters data:
-
-```
-python3 run.py app -p
+```bash
+python3 manage.py run app
 ```
 
-you can then start the development server:
+the api server will be available in http://localhost:8000
 
-```
-python3 run.py app
+You should populate the database with network, stations and parameters data:
+
+```bash
+python3 run.py api -p
 ```
 
-### run the crawler
+# Setup for deploymeny
+
+1 - Setup traefik - follow this [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04)
+
+2 - edit `docker-compose.prod.yml` traefik domain settings with your domain.
+
+2 - build and run for production
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+You should populate the database with network, stations and parameters data:
+
+```bash
+docker exec -it re-snirh_backend_1 python3 run.py api -p
+```
+
+# Crawler
 
 The crawler accepts multiple commands that will print the data and write it to a `.json` file
 
@@ -75,7 +111,7 @@ python3 run.py crawler params -n {network_id} -s {station_id}
 python3 run.py crawler data -s {station_id} -p {parameter_id} -f {tmin} -t {tmax}
 ```
 
-#### Examples
+## Examples
 
 Get all networks - writes it in `data/networks.json`
 
