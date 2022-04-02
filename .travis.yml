@@ -1,0 +1,10 @@
+
+language: python
+python:
+  - "3.9"
+# command to install dependencies
+install:
+  - pip install -r app/requirements/dev.txt
+# command to run tests
+script:
+  - pytest
