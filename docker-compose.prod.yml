@@ -7,7 +7,7 @@ networks:
 services:
   backend:
     build: 
-      context: ./app/
+      context: ./backend/
       dockerfile: Dockerfile.prod
     restart: always
     env_file:
