@@ -75,7 +75,7 @@ You should populate the database with network, stations and parameters data:
 python3 run.py api -p
 ```
 
-# Setup for deploymeny
+# Setup for deployment
 
 1 - Setup traefik - follow this [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04)
 

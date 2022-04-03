@@ -51,11 +51,17 @@ class Run:
             help="populate api database",
             action="store_true",
         )
+        self.api_parser.add_argument(
+            "-r",
+            "--replace",
+            help="replace existing data",
+            action="store_true",
+        )
 
         args, _ = parser.parse_known_args()
         if args.run_mode == Mode.api:
             if args.populate_database:
-                populate_database(True)
+                populate_database(args.replace)
             run_api()
 
         elif args.CrawlerType == CrawlerType.networks:
