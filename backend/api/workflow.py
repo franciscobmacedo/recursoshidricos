@@ -1,9 +1,13 @@
 from api import crud, get_db
+import logging
+import datetime
+from common.settings import setup_logs
 
 
 def populate_database(replace):
-
-    print("POPULATING DATABASE. REPLACE IS", replace)
+    setup_logs("populate_db")
+    logging.info("POPULATING DATABASE")
+    logging.info(f"replace is: {replace}")
     from crawler.networks import Networks
     from crawler.parameters import Parameters
     from crawler.stations import Stations
@@ -13,10 +17,10 @@ def populate_database(replace):
     db = next(get_db())
     crud.create_networks(db, networks)
     for network in networks:
-        print("getting stations for", network.id)
+        logging.info(f"getting stations for {network.id}")
 
         stations = Stations(session=bot.session, network_id=network.id).get()
-        print("population stations db")
+        logging.info("population stations db")
         crud.create_stations(db, stations, network_id=network.id)
 
         for station in stations:
@@ -24,10 +28,10 @@ def populate_database(replace):
                 if crud.get_stations_parameters(db, station_ids=[station.id]):
                     continue
 
-            print("getting parameters for", station.id)
+            logging.info("getting parameters for {station.id}")
 
             parameters = Parameters(session=bot.session, network_id=network.id).get(
                 station_id=station.id
             )
-            print("population parameters db")
+            logging.info("population parameters db")
             crud.create_parameters(db, parameters, station_id=station.id)

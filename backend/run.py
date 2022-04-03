@@ -62,7 +62,8 @@ class Run:
         if args.run_mode == Mode.api:
             if args.populate_database:
                 populate_database(args.replace)
-            run_api()
+            else:
+                run_api()
 
         elif args.CrawlerType == CrawlerType.networks:
             crawler.dump_networks()

@@ -1,6 +1,9 @@
+import logging
 import os
+import datetime
 
 DATA_DIR = "data"
+LOGS_DIR = "logs"
 
 
 NETWORKS_FILE = os.path.join(DATA_DIR, "networks.json")
@@ -27,3 +30,15 @@ class bcolors:
 def create_data_dir():
     if not os.path.exists(DATA_DIR):
         os.mkdir(DATA_DIR)
+
+
+
+def create_logs_dir():
+    if not os.path.exists(LOGS_DIR):
+        os.mkdir(LOGS_DIR)
+
+
+def setup_logs(filename: str):
+    create_logs_dir()
+    now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
+    logging.basicConfig(filename=os.path.join(LOGS_DIR, f"{filename}_{now}.log"), level=logging.DEBUG)

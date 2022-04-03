@@ -12,5 +12,6 @@ venv.bak/
 
 mypy.ini
 data/
+logs/
 
 *.db
