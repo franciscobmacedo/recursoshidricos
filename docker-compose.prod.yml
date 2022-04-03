@@ -15,7 +15,7 @@ services:
     depends_on:
       - db
     labels:
-      - traefik.http.routers.django.rule=Host(`api.resnirh.ml`)
+      - traefik.http.routers.django.rule=Host(`api.recursoshidricos.pt`)
       - traefik.http.routers.django.tls=true
       - traefik.http.routers.django.tls.certresolver=lets-encrypt
       - traefik.port=80
