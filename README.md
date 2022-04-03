@@ -2,8 +2,6 @@
 
 Transformation of [SNIRH](https://snirh.apambiente.pt/) platform data into an accessible RESTFull API.
 
-running at https://snirhapi.herokuapp.com/
-
 ## What is SNIRH?
 
 [SNIRH](https://snirh.apambiente.pt/) (Sistema Nacional de Informação de Recursos Hídricos - National Information System for Water Resources) is a website built in the mid90s that gives access to all sorts of water resources data accross Portugal. It had little to no updates in the last 30 years.
@@ -36,7 +34,7 @@ the api server will be available in http://localhost:8000
 You should populate the database with network, stations and parameters data:
 
 ```bash
-docker exec -it re-snirh_backend_1 python3 run.py api -p
+docker exec -it recursoshidricos_backend_1 python3 run.py api -p
 ```
 
 ## without docker
@@ -91,7 +89,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 You should populate the database with network, stations and parameters data:
 
 ```bash
-docker exec -it re-snirh_backend_1 python3 run.py api -p
+docker exec -it recursoshidricos_backend_1 python3 run.py api -p
 ```
 
 # Crawler
