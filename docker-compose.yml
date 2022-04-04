@@ -4,6 +4,8 @@ services:
       context: ./backend/
       dockerfile: Dockerfile
     restart: always
+    volumes:      
+      - ./backend:/code
     ports:
       - 8000:8000
     env_file:
