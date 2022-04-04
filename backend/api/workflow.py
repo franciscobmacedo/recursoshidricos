@@ -28,7 +28,7 @@ def populate_database(replace):
                 if crud.get_stations_parameters(db, station_ids=[station.id]):
                     continue
 
-            logging.info("getting parameters for {station.id}")
+            logging.info(f"getting parameters for {station.id}")
 
             parameters = Parameters(session=bot.session, network_id=network.id).get(
                 station_id=station.id
