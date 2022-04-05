@@ -34,5 +34,22 @@ services:
       - .env
     networks:
       - internal
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    expose:
+      - "5050"
+    labels:
+      - traefik.http.routers.pgadmin.rule=Host(`db-admin.recursoshidricos.pt`)
+      - traefik.http.routers.pgadmin.tls=true
+      - traefik.http.routers.pgadmin.tls.certresolver=lets-encrypt
+      - traefik.port=5050
+    networks:
+      - internal
+      - web
 volumes:
   postgres_data:
