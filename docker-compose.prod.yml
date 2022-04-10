@@ -6,6 +6,7 @@ networks:
 
 services:
   backend:
+    container_name: backend
     build: 
       context: ./backend/
       dockerfile: Dockerfile.prod
@@ -27,6 +28,7 @@ services:
     expose:
       - 80
   db:
+    container_name: db
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -35,7 +37,7 @@ services:
     networks:
       - internal
   pgadmin:
-    container_name: pgadmin4_container
+    container_name: pgadmin
     image: dpage/pgadmin4
     restart: always
     environment:

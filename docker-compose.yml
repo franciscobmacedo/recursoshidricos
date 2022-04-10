@@ -22,7 +22,7 @@ services:
     env_file:
       - .env.dev
   pgadmin:
-    container_name: pgadmin4_container
+    container_name: pgadmin
     image: dpage/pgadmin4
     restart: always
     environment:
