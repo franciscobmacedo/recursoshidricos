@@ -1,0 +1,22 @@
+#
+FROM python:3.9
+
+# 
+WORKDIR /code
+
+# 
+COPY ./requirements/ /code/requirements/
+COPY ./requirements.txt /code/requirements.txt
+
+# 
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+# 
+# copy entrypoint.sh
+COPY ./entrypoint.sh .
+
+# copy project
+COPY . .
+
+# 
+ENTRYPOINT ["/code/entrypoint.sh"]
