@@ -31,10 +31,10 @@ docker-compose up -d --build
 
 the api server will be available in http://localhost:8000
 
-You should populate the database with network, stations and parameters data:
+You should populate the database with network, stations and parameters data (static data):
 
 ```bash
-docker exec -it recursoshidricos_backend_1 python3 run.py api -p
+docker exec -it recursoshidricos_backend_1 python3 manage.py populate -s
 ```
 
 ## without docker
@@ -70,7 +70,7 @@ the api server will be available in http://localhost:8000
 You should populate the database with network, stations and parameters data:
 
 ```bash
-python3 run.py api -p
+python3 manage.py populate -s
 ```
 
 # Setup for deployment
@@ -115,23 +115,23 @@ python3 run.py crawler data -s {station_id} -p {parameter_id} -f {tmin} -t {tmax
 Get all networks - writes it in `data/networks.json`
 
 ```
-python3 run.py crawler networks
+python3 manage.py crawler networks
 ```
 
 Get all stations of the network 920123705 - writes it in `data/stations-network_920123705.json`
 
 ```
-python3 run.py crawler stations -n 920123705
+python3 manage.py crawler stations -n 920123705
 ```
 
 Get all parameters of the station 1627758916 inside the network 920123705 - writes it in `data/parameters-station_1627758916.json`
 
 ```
-python3 run.py crawler parameters -n 920123705 -s 1627758916
+python3 manage.py crawler parameters -n 920123705 -s 1627758916
 ```
 
 Get data for parameter 1849 of the station 1627758916 between 1980-01-01 and 2020-12-31 - writes it in `data/data-station_1627758916-parameter_1849-tmin_1980-01-01-tmax_2020-12-31`
 
 ```
-python3 run.py crawler data -s 1627758916 -p 1849 -f 1980-01-01 -t 2020-12-31
+python3 manage.py crawler data -s 1627758916 -p 1849 -f 1980-01-01 -t 2020-12-31
 ```
