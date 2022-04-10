@@ -2,8 +2,8 @@ import datetime
 
 import pandas as pd
 from bs4 import BeautifulSoup
-from common.schemas import DataEntryList
-from common.utils import parse_datetime
+from core.schemas import DataEntryList
+from utils import parse_datetime
 
 from crawler.base import BaseCrawler
 
@@ -11,25 +11,25 @@ from crawler.base import BaseCrawler
 class GetData(BaseCrawler):
     def get_data(
         self,
-        station_id: str,
-        parameter_id: str,
+        station_uid: str,
+        parameter_uid: str,
         tmin: datetime.datetime,
         tmax: datetime.datetime,
     ) -> DataEntryList:
         res = self.session.get(
             self.data_url,
             params={
-                "sites": station_id,
-                "pars": parameter_id,
+                "sites": station_uid,
+                "pars": parameter_uid,
                 "tmin": tmin.strftime("%d/%m/%Y"),
                 "tmax": tmax.strftime("%d/%m/%Y"),
             },
         )
+        print(res.url)
         soup = BeautifulSoup(res.text, "html.parser")
         data_table = soup.find_all("table")[-1]
         df = pd.read_html(str(data_table))[0]
         df = df.iloc[2:]
-        print(df)
         if df.empty:
             return DataEntryList(__root__=[])
 

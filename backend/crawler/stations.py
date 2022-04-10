@@ -1,15 +1,15 @@
 from typing import List
 
 from bs4 import BeautifulSoup
-from common.schemas import Station
+from core.schemas import Station
 
 from crawler.base import BaseCrawler
 from crawler.networks import Networks
 
 
 class Stations(BaseCrawler):
-    def get_stations_ids(self):
-        """return a dict with station code and id: {'22E/01UG': '920686062', ... ,'18B/04UG': '920685966'}"""
+    def get_stations_uids(self):
+        """return a dict with station code and uid: {'22E/01UG': '920686062', ... ,'18B/04UG': '920685966'}"""
         res = self.session.get(self.stations_url)
         soup = BeautifulSoup(res.text, "html.parser")
         data = {}
@@ -26,8 +26,8 @@ class Stations(BaseCrawler):
             stations = soup.find("select", {"name": "f_estacoes[]"})
             for station in stations.find_all("option"):
                 code = station.text.split("(")[-1].strip(")").strip("■").strip()
-                id = station["value"]
-                data[code] = id
+                uid = station["value"]
+                data[code] = uid
         return data
 
     def get_stations_details(self):
@@ -45,14 +45,14 @@ class Stations(BaseCrawler):
         return data
 
     def get(self) -> List[Station]:
-        ids = self.get_stations_ids()
+        uids = self.get_stations_uids()
         stations = self.get_stations_details()
         formatted_stations = []
         for station in stations[:]:
             try:
                 formatted_stations.append(
                     Station(
-                        id=ids[station["CÓDIGO"]],
+                        uid=uids[station["CÓDIGO"]],
                         codigo=station.get("CÓDIGO"),
                         nome=station.get("NOME"),
                         altitude=station.get("ALTITUDE (m)"),
@@ -104,7 +104,7 @@ def get_all_stations_states():
     networks = Networks().get()
     station_states = []
     for network in networks:
-        stations = Stations(network_id=network.id).get_stations_details()
+        stations = Stations(network_uid=network.uid).get_stations_details()
         for station in stations:
             station_state = station.get("ESTADO", None)
             if station_state not in station_states:

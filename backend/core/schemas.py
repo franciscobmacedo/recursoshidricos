@@ -23,7 +23,7 @@ class StationState:
 
 
 class Network(BaseModel):
-    id: str
+    uid: str
     nome: str
 
     @validator("nome")
@@ -36,7 +36,7 @@ class Network(BaseModel):
 
 
 class Station(BaseModel):
-    id: str
+    uid: str
     codigo: str
     nome: str
     altitude: Optional[str]
@@ -107,7 +107,7 @@ class Station(BaseModel):
 
 
 class Parameter(BaseModel):
-    id: str
+    uid: str
     nome: str
 
     @validator("nome")
@@ -144,5 +144,56 @@ class DataEntryList(BaseModel):
                 {"timestamp": "1980-01-01T00:00:00", "value": 851030},
                 {"timestamp": "1980-01-02T00:00:00", "value": 631010},
                 {"timestamp": "1980-01-03T00:00:00", "value": 231010},
+            ]
+        }
+
+
+class DataReturn(BaseModel):
+    timestamp: datetime.datetime
+    value: float
+    station_uid: str
+    parameter_uid: str
+
+    @validator("value")
+    def validate_value(cls, value: str) -> float:
+        return float(value)
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "timestamp": "1980-01-01T00:00:00",
+                "value": 851030,
+                "station_uid": "1627743378",
+                "parameter_uid": "1849",
+            }
+        }
+
+
+class DataReturnList(BaseModel):
+    __root__: list[DataReturn]
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": [
+                {
+                    "timestamp": "1980-01-01T00:00:00",
+                    "value": 851030,
+                    "station_uid": "1627743378",
+                    "parameter_uid": "1849",
+                },
+                {
+                    "timestamp": "1980-01-02T00:00:00",
+                    "value": 631010,
+                    "station_uid": "1627743378",
+                    "parameter_uid": "1849",
+                },
+                {
+                    "timestamp": "1980-01-03T00:00:00",
+                    "value": 231010,
+                    "station_uid": "1627743378",
+                    "parameter_uid": "1849",
+                },
             ]
         }

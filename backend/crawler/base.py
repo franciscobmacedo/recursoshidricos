@@ -9,7 +9,7 @@ class BaseCrawler:
     def __init__(
         self,
         session: Optional[Type[requests.Session]] = None,
-        network_id: str = None,
+        network_uid: str = None,
         new_network=True,
         *args,
         **kwargs,
@@ -31,8 +31,8 @@ class BaseCrawler:
         else:
             self.start_session()
 
-        self.network_id = network_id
-        if self.network_id and new_network:
+        self.network_uid = network_uid
+        if self.network_uid and new_network:
             self.select_network()
 
     def start_session(self):
@@ -40,5 +40,5 @@ class BaseCrawler:
         self.session.get(self.home_url)
 
     def select_network(self):
-        data = {"f_redes_seleccao[]": self.network_id, "aplicar_filtro": 1}
+        data = {"f_redes_seleccao[]": self.network_uid, "aplicar_filtro": 1}
         self.session.post(self.home_url, data=data)
