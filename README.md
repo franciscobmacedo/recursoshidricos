@@ -16,8 +16,8 @@ Transformation of [SNIRH](https://snirh.apambiente.pt/) platform data into an ac
 
 This project consists of 2 main blocks:
 
-- [**Crawler**](crawler) - fetches the data and transforms it into standart python formats.
-- [**App**](app) - uses the fetched data and creates a RESTFull API interface for easy access.
+- **Crawler** - fetches the data and transforms it into standart python formats.
+- **App** - uses the fetched data, stores it in PostgreSQL database, and creates a RESTFull API interface for easy access.
 
 # Setup for development
 
@@ -34,7 +34,7 @@ the api server will be available in http://localhost:8000
 You should populate the database with network, stations and parameters data (static data):
 
 ```bash
-docker exec -it recursoshidricos_backend_1 python3 manage.py populate -s
+docker exec -it backend python3 manage.py populate -s
 ```
 
 ## without docker
@@ -67,7 +67,7 @@ python3 manage.py run app
 
 the api server will be available in http://localhost:8000
 
-You should populate the database with network, stations and parameters data:
+You should populate the database with network, stations and parameters data (static data):
 
 ```bash
 python3 manage.py populate -s
@@ -86,10 +86,10 @@ python3 manage.py populate -s
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
-You should populate the database with network, stations and parameters data:
+You should populate the database with network, stations and parameters data (static data):
 
 ```bash
-docker exec -it recursoshidricos_backend_1 python3 run.py api -p
+docker exec -it backend python3 manage.py populate -s
 ```
 
 # Crawler
@@ -98,16 +98,16 @@ The crawler accepts multiple commands that will print the data and write it to a
 
 ```
 # all networks
-python3 run.py crawler networks
+python3 manage.py crawler networks
 
 # all stations for a network_id
-python3 run.py crawler stations -n {network_id}
+python3 manage.py crawler stations -n {network_id}
 
 # all params of a station_id from a network_id
-python3 run.py crawler params -n {network_id} -s {station_id}
+python3 manage.py crawler params -n {network_id} -s {station_id}
 
 # data for a parameter_id of a station_id from tmin (yyyy-mm-dd) to tmax (yyyy-mm-dd)
-python3 run.py crawler data -s {station_id} -p {parameter_id} -f {tmin} -t {tmax}
+python3 manage.py crawler data -s {station_id} -p {parameter_id} -f {tmin} -t {tmax}
 ```
 
 ## Examples
