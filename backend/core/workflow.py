@@ -1,6 +1,4 @@
-import logging
 import datetime
-from django.conf import settings
 from threading import Thread
 import crawler
 
@@ -64,9 +62,8 @@ def populate_timeseries_data(psa: models.PSA, replace: bool):
         f"population data db for parameter {psa.parameter.uid} and station {psa.station.uid} with replace {replace}"
     )
 
-    from crawler.data import GetData
 
-    bot = GetData()
+    bot = crawler.GetData()
     now = datetime.datetime.now()
     if replace:
         data = bot.get_data(
