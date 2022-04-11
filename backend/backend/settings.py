@@ -28,7 +28,7 @@ SECRET_KEY = "$lmh1+3d4&!ww0_vrv(ui(d!hzmfs_1m*xs*@x%4m-7qv06t4)"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
