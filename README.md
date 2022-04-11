@@ -92,6 +92,20 @@ You should populate the database with network, stations and parameters data (sta
 docker exec -it backend python3 manage.py populate -s
 ```
 
+# Get timeseries data
+
+to get all timeseries data run:
+
+```bash
+docker exec -it backend python3 manage.py populate -t -r # -r stands for replace
+```
+
+to get timeseries data just for the last day:
+
+```bash
+docker exec -it backend python3 manage.py populate -t # -r stands for replace
+```
+
 # Crawler
 
 The crawler accepts multiple commands that will print the data and write it to a `.json` file
