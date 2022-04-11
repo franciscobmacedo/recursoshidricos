@@ -1,5 +1,4 @@
--r app.txt
--r common.txt
+-r base.txt
 isort==5.10.1
 black==22.3.0
 mypy==0.942
