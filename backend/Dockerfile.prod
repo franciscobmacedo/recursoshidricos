@@ -1,22 +1,77 @@
-#
-FROM python:3.9
+###########
+# BUILDER #
+###########
 
-# 
-WORKDIR /code
+# pull official base image
+FROM python:3.9.2-slim-buster AS build
 
-# 
-COPY ./requirements/ /code/requirements/
-COPY ./requirements.txt /code/requirements.txt
+# set work directory
+WORKDIR /usr/src/backend
 
-# 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# 
+# lint
+RUN pip install --upgrade pip
+# RUN pip install flake8
+COPY . .
+# RUN flake8 --ignore=E501,F401,F402,W391,E303,W292,E116,F403,F405,E231,E127,W293,E722,W605,W291,E122,E271,E201,E226,W504,E302,E305,E225,F811,F841,E222,E128,E241,E123,W503,E126,E741,E502,E712,F541,E713 .
+
+# install dependencies
+COPY ./requirements.txt .
+COPY ./requirements/ ./requirements/
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/backend/wheels -r requirements.txt
+
+
+#########
+# FINAL #
+#########
+
+# pull official base image
+FROM python:3.9.2-slim-buster AS final
+
+# create directory for the app user
+RUN mkdir -p /home/backend
+
+# create the app user
+RUN adduser --system --group backend
+
+# create the appropriate directories
+ENV HOME=/home/backend
+ENV APP_HOME=/home/backend/django
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/staticfiles
+RUN mkdir $APP_HOME/mediafiles
+WORKDIR $APP_HOME
+
+# install dependencies
+RUN apt-get update -y
+RUN apt-get install -y libpq-dev
+RUN apt-get update
+RUN apt install -y netcat
+COPY --from=build /usr/src/backend/wheels /wheels
+COPY --from=build /usr/src/backend/requirements.txt .
+COPY --from=build /usr/src/backend/requirements/ ./requirements/
+RUN pip install --no-cache /wheels/*
+
+
+
 # copy entrypoint.sh
-COPY ./entrypoint.sh .
+COPY ./entrypoint.sh $APP_HOME
 
 # copy project
-COPY . .
+COPY . $APP_HOME
 
-# 
-ENTRYPOINT ["/code/entrypoint.sh"]
+# chown all the files to the app user
+RUN chown -R backend:backend $APP_HOME
+
+# chown all the files to the app user
+RUN chown -R backend:backend /usr/local/lib
+RUN chown -R backend:backend /home/backend
+
+# change to the app user
+USER backend
+
+# run entrypoint.sh
+ENTRYPOINT ["/home/backend/django/entrypoint.sh"]

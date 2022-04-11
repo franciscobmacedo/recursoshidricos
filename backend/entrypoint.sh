@@ -1,8 +1,8 @@
 #!/bin/sh
 
-if [ "$DATABASE" = "recursoshidricos" ]
+if [ "$POSTGRES_DB" = "recursoshidricos" ]
 then
-    echo "Waiting for recursoshidricos..."
+    echo "Waiting for postgres..."
 
     while ! nc -z $POSTGRES_SERVER $POSTGRES_PORT; do
       sleep 0.1
@@ -10,8 +10,5 @@ then
 
     echo "PostgreSQL started"
 fi
-
-# python manage.py flush --no-input
-# python manage.py migrate
 
 exec "$@"
