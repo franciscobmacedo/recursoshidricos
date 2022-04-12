@@ -24,12 +24,14 @@ Transformation of [SNIRH](https://snirh.apambiente.pt/) platform data into an ac
 
 ## Structure
 
-This project consists of 2 main blocks:
+This project consists of 4 main containers:
 
-- **Backend** - fetches the data, stores it in PostgreSQL database, and creates a RESTFull API interface for easy access.
-- **Frontend** - creates a modern dashboard for easy access :exclamation **work in progress** :exclamation
+- **backend** - fetches the data and creates a RESTFull API interface for easy access.
+- **db** - database container.
+- **pgadmin** - admin panel for postgreSQL.
+- **frontend** - creates a modern dashboard for easy access. :exclamation: **work in progress** :exclamation:
 
-> :exclamation: **If you only need the crawler** go to [this repo](https://github.com/franciscobmacedo/snirhcrawler)
+> :exclamation: **If you only need the crawler (without all this web stuff)** go to [this repo](https://github.com/franciscobmacedo/snirhcrawler)
 
 ## Setup for development
 
