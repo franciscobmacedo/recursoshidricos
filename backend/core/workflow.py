@@ -163,7 +163,11 @@ def populate_static_data(replace):
 
 def populate_variable_data(replace):
     setup_logs('timeseries_data')
-    for psa in models.PSA.objects.annotate(last_updated_null=ExpressionWrapper(Q(last_updated=None), output_field=BooleanField())).order_by('-last_updated_null', 'last_updated'):
+    psas = models.PSA.objects.annotate(last_updated_null=ExpressionWrapper(Q(last_updated=None), output_field=BooleanField())).order_by('-last_updated_null', 'last_updated')
+    count = 1
+    for psa in psas:
+        print_progress_bar(count, psas.count(), prefix='DATA')
+        count += 1
         populate_timeseries_data(psa, replace)
 
  
