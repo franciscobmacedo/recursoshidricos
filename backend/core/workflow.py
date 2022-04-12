@@ -88,23 +88,19 @@ def populate_timeseries_data(psa: models.PSA, replace: bool):
     psa.save()
 
 
-def populate_stations(replace):
+def populate_stations(replace:bool):
     networks = models.Network.objects.all()
-    count = 1
-    for network in models.Network.objects.all():
-        print_progress_bar(count, networks.count(), prefix='STATIONS')
-        count += 1
+    for index, network in enumerate(networks):
+        print_progress_bar(index+1, networks.count(), prefix='STATIONS')
         if not replace and network.stations.exists():
             continue
         populate_network_stations(network)
 
 
-def populate_parameters(replace):
+def populate_parameters(replace:bool):
     stations = models.Station.objects.all()
-    count = 1
-    for station in stations:
-        print_progress_bar(count, stations.count(), prefix='PARAMETERS')
-        count += 1
+    for index, station in enumerate(stations):
+        print_progress_bar(index+1, stations.count(), prefix='PARAMETERS')
         if not replace and models.PSA.objects.filter(station=station).exists():
             continue
         populate_station_parameters(station)
@@ -164,10 +160,8 @@ def populate_static_data(replace):
 def populate_variable_data(replace):
     setup_logs('timeseries_data')
     psas = models.PSA.objects.annotate(last_updated_null=ExpressionWrapper(Q(last_updated=None), output_field=BooleanField())).order_by('-last_updated_null', 'last_updated')
-    count = 1
-    for psa in psas:
-        print_progress_bar(count, psas.count(), prefix='DATA')
-        count += 1
+    for index, psa in enumerate(psas):
+        print_progress_bar(index+1, psas.count(), prefix='DATA')
         populate_timeseries_data(psa, replace)
 
  
