@@ -137,7 +137,7 @@ def populate_static_data():
 
 
 def populate_variable_data(replace):
-    for psa in models.PSA.objects.order_by("-last_updated"):
+    for psa in models.PSA.objects.order_by("last_updated"):
         populate_timeseries_data(psa, replace)
 
 
