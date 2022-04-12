@@ -170,30 +170,6 @@ class DataReturn(BaseModel):
         }
 
 
-class DataReturnList(BaseModel):
-    __root__: list[DataReturn]
-
-    class Config:
-        orm_mode = True
-        schema_extra = {
-            "example": [
-                {
-                    "timestamp": "1980-01-01T00:00:00",
-                    "value": 851030,
-                    "station_uid": "1627743378",
-                    "parameter_uid": "1849",
-                },
-                {
-                    "timestamp": "1980-01-02T00:00:00",
-                    "value": 631010,
-                    "station_uid": "1627743378",
-                    "parameter_uid": "1849",
-                },
-                {
-                    "timestamp": "1980-01-03T00:00:00",
-                    "value": 231010,
-                    "station_uid": "1627743378",
-                    "parameter_uid": "1849",
-                },
-            ]
-        }
+class DataBounds(BaseModel):
+    tmin: datetime.date
+    tmax: datetime.date
