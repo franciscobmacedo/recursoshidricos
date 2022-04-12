@@ -3,7 +3,7 @@
 FROM python:3.9.2-slim-buster
 
 # set work directory
-WORKDIR /usr/src/backend
+WORKDIR /code
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -25,4 +25,4 @@ COPY ./entrypoint.sh .
 COPY . .
 
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/backend/entrypoint.sh"]
+ENTRYPOINT ["/code/entrypoint.sh"]
