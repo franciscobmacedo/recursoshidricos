@@ -19,6 +19,8 @@ This project consists of 2 main blocks:
 - **Crawler** - fetches the data and transforms it into standart python formats.
 - **App** - uses the fetched data, stores it in PostgreSQL database, and creates a RESTFull API interface for easy access.
 
+> :exclamation: **If you only need the crawler** go to [this repo](https://github.com/franciscobmacedo/snirhcrawler)
+
 # Setup for development
 
 ## with docker
