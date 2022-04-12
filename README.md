@@ -2,6 +2,16 @@
 
 Transformation of [SNIRH](https://snirh.apambiente.pt/) platform data into an accessible RESTFull API.
 
+## Table of Contents
+
+- [What is SNIRH?](#what-is-snirh)
+- [Motivation](#motivation)
+- [Structure](#structure)
+- [Setup for development](#setup-for-development)
+- [Setup for deployment](#setup-for-deployment)
+- [Populate timeseries data](#populate-timeseries-data)
+- [Crawler](#crawler)
+
 ## What is SNIRH?
 
 [SNIRH](https://snirh.apambiente.pt/) (Sistema Nacional de Informação de Recursos Hídricos - National Information System for Water Resources) is a website built in the mid90s that gives access to all sorts of water resources data accross Portugal. It had little to no updates in the last 30 years.
@@ -17,13 +27,11 @@ Transformation of [SNIRH](https://snirh.apambiente.pt/) platform data into an ac
 This project consists of 2 main blocks:
 
 - **Crawler** - fetches the data and transforms it into standart python formats.
-- **App** - uses the fetched data, stores it in PostgreSQL database, and creates a RESTFull API interface for easy access.
+- **Api** - uses the fetched data, stores it in PostgreSQL database, and creates a RESTFull API interface for easy access.
 
 > :exclamation: **If you only need the crawler** go to [this repo](https://github.com/franciscobmacedo/snirhcrawler)
 
-# Setup for development
-
-## with docker
+## Setup for development
 
 build and run for development
 
@@ -39,43 +47,9 @@ You should populate the database with network, stations and parameters data (sta
 docker exec -it backend python3 manage.py populate -s -r # -r stands for replace
 ```
 
-## without docker
+> :warning: **Fething the data can take a looong time**
 
-_WINDOWS_
-
-```bash
-git clone https://github.com/franciscobmacedo/snirhAPI
-cd  snirhAPI
-py -m venv venv
-.\venv\scripts\activate
-pip install -r requirements/dev.txt # requirements/dev.txt for development or requirements/common.txt for just the crawler
-```
-
-_MAC/LINUX_
-
-```bash
-git clone https://github.com/franciscobmacedo/snirhAPI
-cd  snirhAPI
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements/dev.txt # requirements/dev.txt for development or requirements/common.txt for just the crawler
-```
-
-you can then run the api:
-
-```bash
-python3 manage.py run app
-```
-
-the api server will be available in http://localhost:8000
-
-You should populate the database with network, stations and parameters data (static data, `-s`):
-
-```bash
-python3 manage.py populate -s -r # -r stands for replace
-```
-
-# Setup for deployment
+## Setup for deployment
 
 1 - Setup traefik - follow this [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04)
 
@@ -94,9 +68,11 @@ You should populate the database with network, stations and parameters data (sta
 docker exec -it backend python3 manage.py populate -s -r # -r stands for replace
 ```
 
-# Get timeseries data
+> :warning: **Fetching the data can take a looong time**
 
-to get all timeseries data run:
+## Populate timeseries data
+
+to get all timeseries data and populate the database run:
 
 ```bash
 docker exec -it backend python3 manage.py populate -t -r # -r stands for replace
@@ -108,9 +84,13 @@ to get timeseries data just for the last day:
 docker exec -it backend python3 manage.py populate -t
 ```
 
-# Crawler
+> :warning: **Fetching the data can take a looong time**
 
-The fetch accepts multiple commands that will print the data and write it to a `.json` file
+## Crawler
+
+The crawler accepts multiple commands that will print the data and write it to a `.json` file
+
+> :exclamation: **If you only need the crawler** go to [this repo](https://github.com/franciscobmacedo/snirhcrawler)
 
 ```
 # all networks
@@ -126,7 +106,7 @@ python3 manage.py fetch params -n {network_id} -s {station_id}
 python3 manage.py fetch data -s {station_id} -p {parameter_id} -f {tmin} -t {tmax}
 ```
 
-## Examples
+### Examples
 
 Get all networks - writes it in `data/networks.json`
 
