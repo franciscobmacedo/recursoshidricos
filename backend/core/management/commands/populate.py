@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options["static"]:
-            populate_static_data()
+            populate_static_data(options["replace"])
         elif options["timeseries"]:
             populate_variable_data(options["replace"])
         else:

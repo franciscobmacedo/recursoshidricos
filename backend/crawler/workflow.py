@@ -52,6 +52,7 @@ def setup_logs(filename: str):
     create_logs_dir()
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
     logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
         filename=os.path.join(LOGS_DIR, f"{filename}_{now}.log"), level=logging.DEBUG
     )
 

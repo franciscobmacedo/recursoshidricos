@@ -4,7 +4,7 @@ import crawler
 from django.db.models import BooleanField, ExpressionWrapper, Q
 
 from core import schemas, models
-
+from crawler.workflow import setup_logs
 
 def populate_networks():
     print("updating networks")
@@ -87,13 +87,17 @@ def populate_timeseries_data(psa: models.PSA, replace: bool):
     psa.save()
 
 
-def populate_stations():
+def populate_stations(replace):
     for network in models.Network.objects.all():
+        if not replace and network.stations.exists():
+            continue
         populate_network_stations(network)
 
 
-def populate_parameters():
+def populate_parameters(replace):
     for station in models.Station.objects.all():
+        if not replace and models.PSA.objects.filter(station=station).exists():
+            continue
         populate_station_parameters(station)
 
 def populate_stations_thread():
@@ -142,12 +146,14 @@ def populate_data_thread(replace):
             t.join()
 
 
-def populate_static_data():
+def populate_static_data(replace):
+    setup_logs('static_data')
     populate_networks()
-    populate_stations()
-    populate_parameters()
+    populate_stations(replace)
+    populate_parameters(replace)
 
 def populate_variable_data(replace):
+    setup_logs('timeseries_data')
     for psa in models.PSA.objects.annotate(last_updated_null=ExpressionWrapper(Q(last_updated=None), output_field=BooleanField())).order_by('-last_updated_null', 'last_updated'):
         populate_timeseries_data(psa, replace)
 
