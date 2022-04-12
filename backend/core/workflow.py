@@ -88,6 +88,16 @@ def populate_timeseries_data(psa: models.PSA, replace: bool):
 
 
 def populate_stations():
+    for network in models.Network.objects.all():
+        populate_network_stations(network)
+
+
+def populate_parameters():
+    for station in models.Station.objects.all():
+        populate_station_parameters(station)
+
+def populate_stations_thread():
+    """THIS DOESN'T WORK SOMETIMES - FATAL:  sorry, too many clients already"""
     threads = []
     for network in models.Network.objects.all():
         t = Thread(
@@ -100,7 +110,8 @@ def populate_stations():
         t.join()
 
 
-def populate_parameters():
+def populate_parameters_thread():
+    """THIS DOESN'T WORK SOMETIMES - FATAL:  sorry, too many clients already"""
     for network in models.Network.objects.all():
         print(f"thread for updating parameters for network {network}")
         threads = []
@@ -115,7 +126,7 @@ def populate_parameters():
             t.join()
 
 
-def populate_data(replace):
+def populate_data_thread(replace):
     """THIS DOESN'T WORK - FATAL:  sorry, too many clients already"""
     for station in models.Station.objects.all():
         psas = models.PSA.objects.filter(station=station)
