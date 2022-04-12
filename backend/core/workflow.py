@@ -6,7 +6,7 @@ from django.db.models import BooleanField, ExpressionWrapper, Q
 
 from core import schemas, models
 from crawler.workflow import setup_logs
-
+from utils import print_progress_bar
 def populate_networks():
     logging.info("updating networks")
     bot = crawler.Networks()
@@ -89,14 +89,22 @@ def populate_timeseries_data(psa: models.PSA, replace: bool):
 
 
 def populate_stations(replace):
+    networks = models.Network.objects.all()
+    count = 1
     for network in models.Network.objects.all():
+        print_progress_bar(count, networks.count(), prefix='STATIONS')
+        count += 1
         if not replace and network.stations.exists():
             continue
         populate_network_stations(network)
 
 
 def populate_parameters(replace):
-    for station in models.Station.objects.all():
+    stations = models.Station.objects.all()
+    count = 1
+    for station in stations:
+        print_progress_bar(count, stations.count(), prefix='PARAMETERS')
+        count += 1
         if not replace and models.PSA.objects.filter(station=station).exists():
             continue
         populate_station_parameters(station)

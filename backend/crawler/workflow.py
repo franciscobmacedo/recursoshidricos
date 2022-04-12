@@ -53,9 +53,12 @@ def setup_logs(filename: str):
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
     logging.basicConfig(
         format='%(asctime)s %(levelname)-8s %(message)s',
-        filename=os.path.join(LOGS_DIR, f"{filename}_{now}.log"), level=logging.DEBUG
+         handlers=[
+        logging.FileHandler(os.path.join(LOGS_DIR, f"{filename}_{now}.log")),
+        logging.StreamHandler()
+        ],
+        level=logging.DEBUG
     )
-
 
 def dump(filename: str, data: Union[list, dict, str]):
     create_data_dir()
