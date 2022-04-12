@@ -29,7 +29,7 @@ SECRET_KEY = "$lmh1+3d4&!ww0_vrv(ui(d!hzmfs_1m*xs*@x%4m-7qv06t4)"
 DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
 
 # Application definition
 
