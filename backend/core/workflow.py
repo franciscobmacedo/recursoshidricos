@@ -1,4 +1,5 @@
 import datetime
+import logging
 from threading import Thread
 import crawler
 from django.db.models import BooleanField, ExpressionWrapper, Q
@@ -7,7 +8,7 @@ from core import schemas, models
 from crawler.workflow import setup_logs
 
 def populate_networks():
-    print("updating networks")
+    logging.info("updating networks")
     bot = crawler.Networks()
     networks = bot.get()
     items = [models.Network(**network.dict()) for network in networks]
@@ -17,7 +18,7 @@ def populate_networks():
 
 
 def populate_network_stations(network: models.Network, session=None):
-    print(f"updating stations for {network}")
+    logging.info(f"updating stations for {network}")
     stations = crawler.Stations(session=session, network_uid=network.uid).get()
     uids = [s.uid for s in stations]
     existing_uids = models.Station.objects.filter(uid__in=uids).values_list(
@@ -32,7 +33,7 @@ def populate_network_stations(network: models.Network, session=None):
 
 
 def populate_station_parameters(station: models.Station, session=None):
-    print(f"updating parameters for {station}")
+    logging.info(f"updating parameters for {station}")
     parameters = crawler.Parameters(
         session=session, network_uid=station.network.uid
     ).get(station_uid=station.uid)
@@ -59,7 +60,7 @@ def populate_station_parameters(station: models.Station, session=None):
 
 
 def populate_timeseries_data(psa: models.PSA, replace: bool):
-    print(
+    logging.info(
         f"population data db for parameter {psa.parameter.uid} and station {psa.station.uid} with replace {replace}"
     )
 
@@ -117,7 +118,7 @@ def populate_stations_thread():
 def populate_parameters_thread():
     """THIS DOESN'T WORK SOMETIMES - FATAL:  sorry, too many clients already"""
     for network in models.Network.objects.all():
-        print(f"thread for updating parameters for network {network}")
+        logging.info(f"thread for updating parameters for network {network}")
         threads = []
         for station in network.stations.all():
             t = Thread(
