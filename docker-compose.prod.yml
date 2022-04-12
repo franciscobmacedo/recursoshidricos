@@ -16,7 +16,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend/logs:/code/logs
+      - ./backend/logs:/usr/src/backend/logs
     labels:
       - traefik.http.routers.backend.rule=Host(`api.recursoshidricos.pt`)
       - traefik.http.routers.backend.tls=true
