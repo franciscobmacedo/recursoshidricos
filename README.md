@@ -26,8 +26,8 @@ Transformation of [SNIRH](https://snirh.apambiente.pt/) platform data into an ac
 
 This project consists of 2 main blocks:
 
-- **Crawler** - fetches the data and transforms it into standart python formats.
-- **Api** - uses the fetched data, stores it in PostgreSQL database, and creates a RESTFull API interface for easy access.
+- **Backend** - fetches the data, stores it in PostgreSQL database, and creates a RESTFull API interface for easy access.
+- **Frontend** - creates a modern dashboard for easy access :exclamation **work in progress** :exclamation
 
 > :exclamation: **If you only need the crawler** go to [this repo](https://github.com/franciscobmacedo/snirhcrawler)
 
