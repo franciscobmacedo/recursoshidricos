@@ -2,12 +2,12 @@ import datetime
 import logging
 from threading import Thread
 import crawler
-from django.db.models import BooleanField, ExpressionWrapper, Q
+from django.db.models import BooleanField, ExpressionWrapper, Q, QuerySet
 
 from core import schemas, models
 from crawler.workflow import setup_logs
 from utils import print_progress_bar
-def populate_networks():
+def populate_networks() -> QuerySet[models.Network]:
     logging.info("updating networks")
     bot = crawler.Networks()
     networks = bot.get()
@@ -17,7 +17,7 @@ def populate_networks():
     )
 
 
-def populate_network_stations(network: models.Network, session=None):
+def populate_network_stations(network: models.Network, session=None)-> QuerySet[models.Station]:
     logging.info(f"updating stations for {network}")
     stations = crawler.Stations(session=session, network_uid=network.uid).get()
     uids = [s.uid for s in stations]
@@ -29,10 +29,10 @@ def populate_network_stations(network: models.Network, session=None):
         for station in stations
         if station.uid not in existing_uids
     ]
-    models.Station.objects.bulk_create(new_stations)
+    return models.Station.objects.bulk_create(new_stations)
+    
 
-
-def populate_station_parameters(station: models.Station, session=None):
+def populate_station_parameters(station: models.Station, session=None)-> QuerySet[models.PSA]:
     logging.info(f"updating parameters for {station}")
     parameters = crawler.Parameters(
         session=session, network_uid=station.network.uid
@@ -56,10 +56,10 @@ def populate_station_parameters(station: models.Station, session=None):
         for parameter in all_parameters
         if parameter not in existing_psa_parameters
     ]
-    models.PSA.objects.bulk_create(new_psa)
+    return models.PSA.objects.bulk_create(new_psa)
 
 
-def populate_timeseries_data(psa: models.PSA, replace: bool):
+def populate_timeseries_data(psa: models.PSA, replace: bool)-> None:
     logging.info(
         f"population data db for parameter {psa.parameter.uid} and station {psa.station.uid} with replace {replace}"
     )
@@ -88,7 +88,7 @@ def populate_timeseries_data(psa: models.PSA, replace: bool):
     psa.save()
 
 
-def populate_stations(replace:bool):
+def populate_stations(replace: bool)-> None:
     networks = models.Network.objects.all()
     for index, network in enumerate(networks):
         print_progress_bar(index+1, networks.count(), prefix='STATIONS')
@@ -97,7 +97,7 @@ def populate_stations(replace:bool):
         populate_network_stations(network)
 
 
-def populate_parameters(replace:bool):
+def populate_parameters(replace: bool)-> None:
     stations = models.Station.objects.all()
     for index, station in enumerate(stations):
         print_progress_bar(index+1, stations.count(), prefix='PARAMETERS')
@@ -105,7 +105,7 @@ def populate_parameters(replace:bool):
             continue
         populate_station_parameters(station)
 
-def populate_stations_thread():
+def populate_stations_thread()-> None:
     """THIS DOESN'T WORK SOMETIMES - FATAL:  sorry, too many clients already"""
     threads = []
     for network in models.Network.objects.all():
@@ -119,7 +119,7 @@ def populate_stations_thread():
         t.join()
 
 
-def populate_parameters_thread():
+def populate_parameters_thread()-> None:
     """THIS DOESN'T WORK SOMETIMES - FATAL:  sorry, too many clients already"""
     for network in models.Network.objects.all():
         logging.info(f"thread for updating parameters for network {network}")
@@ -135,7 +135,7 @@ def populate_parameters_thread():
             t.join()
 
 
-def populate_data_thread(replace):
+def populate_data_thread(replace: bool)-> None:
     """THIS DOESN'T WORK - FATAL:  sorry, too many clients already"""
     for station in models.Station.objects.all():
         psas = models.PSA.objects.filter(station=station)
@@ -151,13 +151,13 @@ def populate_data_thread(replace):
             t.join()
 
 
-def populate_static_data(replace):
+def populate_static_data(replace: bool)-> None:
     setup_logs('static_data')
     populate_networks()
     populate_stations(replace)
     populate_parameters(replace)
 
-def populate_variable_data(replace):
+def populate_variable_data(replace: bool)-> None:
     setup_logs('timeseries_data')
     psas = models.PSA.objects.annotate(last_updated_null=ExpressionWrapper(Q(last_updated=None), output_field=BooleanField())).order_by('-last_updated_null', 'last_updated')
     for index, psa in enumerate(psas):
