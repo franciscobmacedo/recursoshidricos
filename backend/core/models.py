@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db import models
 from bulk_update_or_create import BulkUpdateOrCreateQuerySet
 
@@ -54,7 +55,6 @@ class Parameter(models.Model):
         return f"{self.uid} - {self.nome}"
 
 
-# Parameter Station Assignment
 class PSA(models.Model):
     station: Station = models.ForeignKey(
         Station, on_delete=models.CASCADE, related_name="psa"
@@ -65,9 +65,11 @@ class PSA(models.Model):
     last_updated = models.DateTimeField(null=True)
 
     def __str__(self) -> str:
-        return f"{self.station.uid} - {self.parameter.uid}"
+        return f"{self.parameter.uid} - {self.station.uid}"
 
-
+    class Meta:
+        verbose_name = "Parameter Station Assignment"
+        verbose_name_plural = "Parameter Station Assignments"
 class Data(models.Model):
     timestamp = models.DateTimeField()
     value = models.FloatField()
