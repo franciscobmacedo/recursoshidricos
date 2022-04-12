@@ -37,9 +37,7 @@ def populate_network_stations(
     return models.Station.objects.bulk_create(new_stations)
 
 
-def populate_station_parameters(
-    station: models.Station, session=None
-) -> QuerySet[models.PSA]:
+def populate_station_parameters(station: models.Station, session=None) -> None:
     logging.info(f"updating parameters for {station}")
     parameters = crawler.Parameters(
         session=session, network_uid=station.network.uid
@@ -63,7 +61,9 @@ def populate_station_parameters(
         for parameter in all_parameters
         if parameter not in existing_psa_parameters
     ]
-    return models.PSA.objects.bulk_create(new_psa)
+    models.PSA.objects.bulk_create(new_psa)
+    station.last_update = datetime.datetime.now()
+    station.save()
 
 
 def populate_timeseries_data(psa: models.PSA, replace: bool) -> None:
@@ -90,7 +90,7 @@ def populate_timeseries_data(psa: models.PSA, replace: bool) -> None:
     models.Data.objects.filter(psa=psa, timestamp__in=timestamps).delete()
     items = [models.Data(**d.dict(), psa=psa) for d in data.__root__]
     models.Data.objects.bulk_create(items)
-    psa.last_updated = datetime.datetime.now()
+    psa.data_last_update = datetime.datetime.now()
     psa.save()
 
 
@@ -104,7 +104,11 @@ def populate_stations(replace: bool) -> None:
 
 
 def populate_parameters(replace: bool) -> None:
-    stations = models.Station.objects.all()
+    stations = models.Station.objects.annotate(
+        last_update_null=ExpressionWrapper(
+            Q(last_update=None), output_field=BooleanField()
+        )
+    ).order_by("-last_update_null", "last_update")
     for index, station in enumerate(stations):
         print_progress_bar(index + 1, stations.count(), prefix="PARAMETERS")
         if not replace and models.PSA.objects.filter(station=station).exists():
@@ -168,10 +172,10 @@ def populate_static_data(replace: bool) -> None:
 def populate_variable_data(replace: bool) -> None:
     setup_logs("timeseries_data")
     psas = models.PSA.objects.annotate(
-        last_updated_null=ExpressionWrapper(
-            Q(last_updated=None), output_field=BooleanField()
+        last_update_null=ExpressionWrapper(
+            Q(data_last_update=None), output_field=BooleanField()
         )
-    ).order_by("-last_updated_null", "last_updated")
+    ).order_by("-last_update_null", "data_last_update")
     for index, psa in enumerate(psas):
         print_progress_bar(index + 1, psas.count(), prefix="DATA")
         populate_timeseries_data(psa, replace)

@@ -41,6 +41,7 @@ class Station(models.Model):
     network = models.ForeignKey(
         Network, on_delete=models.CASCADE, related_name="stations"
     )
+    last_update = models.DateTimeField(null=True)
 
     def __str__(self) -> str:
         return f"{self.uid} - {self.nome}"
@@ -62,7 +63,7 @@ class PSA(models.Model):
     parameter: Parameter = models.ForeignKey(
         Parameter, on_delete=models.CASCADE, related_name="psa"
     )
-    last_updated = models.DateTimeField(null=True)
+    data_last_update = models.DateTimeField(null=True)
 
     def __str__(self) -> str:
         return f"{self.parameter.uid} - {self.station.uid}"
@@ -70,6 +71,8 @@ class PSA(models.Model):
     class Meta:
         verbose_name = "Parameter Station Assignment"
         verbose_name_plural = "Parameter Station Assignments"
+
+
 class Data(models.Model):
     timestamp = models.DateTimeField()
     value = models.FloatField()
