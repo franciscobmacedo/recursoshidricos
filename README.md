@@ -108,20 +108,20 @@ docker exec -it backend python3 manage.py populate -t
 
 # Crawler
 
-The crawler accepts multiple commands that will print the data and write it to a `.json` file
+The fetch accepts multiple commands that will print the data and write it to a `.json` file
 
 ```
 # all networks
-python3 manage.py crawler networks
+python3 manage.py fetch networks
 
 # all stations for a network_id
-python3 manage.py crawler stations -n {network_id}
+python3 manage.py fetch stations -n {network_id}
 
 # all params of a station_id from a network_id
-python3 manage.py crawler params -n {network_id} -s {station_id}
+python3 manage.py fetch params -n {network_id} -s {station_id}
 
 # data for a parameter_id of a station_id from tmin (yyyy-mm-dd) to tmax (yyyy-mm-dd)
-python3 manage.py crawler data -s {station_id} -p {parameter_id} -f {tmin} -t {tmax}
+python3 manage.py fetch data -s {station_id} -p {parameter_id} -f {tmin} -t {tmax}
 ```
 
 ## Examples
@@ -129,23 +129,23 @@ python3 manage.py crawler data -s {station_id} -p {parameter_id} -f {tmin} -t {t
 Get all networks - writes it in `data/networks.json`
 
 ```
-python3 manage.py crawler networks
+python3 manage.py fetch networks
 ```
 
 Get all stations of the network 920123705 - writes it in `data/stations-network_920123705.json`
 
 ```
-python3 manage.py crawler stations -n 920123705
+python3 manage.py fetch stations -n 920123705
 ```
 
 Get all parameters of the station 1627758916 inside the network 920123705 - writes it in `data/parameters-station_1627758916.json`
 
 ```
-python3 manage.py crawler parameters -n 920123705 -s 1627758916
+python3 manage.py fetch parameters -n 920123705 -s 1627758916
 ```
 
 Get data for parameter 1849 of the station 1627758916 between 1980-01-01 and 2020-12-31 - writes it in `data/data-station_1627758916-parameter_1849-tmin_1980-01-01-tmax_2020-12-31`
 
 ```
-python3 manage.py crawler data -s 1627758916 -p 1849 -f 1980-01-01 -t 2020-12-31
+python3 manage.py fetch data -s 1627758916 -p 1849 -f 1980-01-01 -t 2020-12-31
 ```
