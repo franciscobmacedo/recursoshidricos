@@ -1,0 +1,11 @@
+	<div id="select_parametros">
+	
+	<select id="f_estacoes_parametros[]" name="f_estacoes_parametros[]" size="8" multiple="multiple"  class="form_select formselectseleccao"  onDblClick="javascript:DBASE_AlertarParaSeleccionarComTecla()">
+
+				
+				
+									<option value="1843">&#9632; N&iacute;vel hidrom&eacute;trico Instant&acirc;neo</option>
+									<option value="436115734">&#9632; N&iacute;vel instant&acirc;neo m&aacute;ximo anual</option>
+									<option value="1845">&#9632; N&iacute;vel m&eacute;dio di&aacute;rio</option>
+			  </select>
+  </div>

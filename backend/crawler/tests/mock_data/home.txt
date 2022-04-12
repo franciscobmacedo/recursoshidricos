@@ -1,0 +1,10 @@
+
+<html>
+
+
+								<select name="f_redes_todas[]" size="10" ondblclick="Selectbox.moveSelectedOptions(this.form['f_redes_todas[]'],this.form['f_redes_seleccao[]'],true); DBASE_MostraAnimacaoAplicarFiltros()" class="form_select">
+																																												<option value="458192970">ETA</option>
+																																												<option value="920123705">Hidrométrica</option>
+																																																						
+																												</select>				
+</html>
