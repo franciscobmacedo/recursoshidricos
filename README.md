@@ -31,10 +31,10 @@ docker-compose up -d --build
 
 the api server will be available in http://localhost:8000
 
-You should populate the database with network, stations and parameters data (static data):
+You should populate the database with network, stations and parameters data (static data, `-s`):
 
 ```bash
-docker exec -it backend python3 manage.py populate -s
+docker exec -it backend python3 manage.py populate -s -r # -r stands for replace
 ```
 
 ## without docker
@@ -67,10 +67,10 @@ python3 manage.py run app
 
 the api server will be available in http://localhost:8000
 
-You should populate the database with network, stations and parameters data (static data):
+You should populate the database with network, stations and parameters data (static data, `-s`):
 
 ```bash
-python3 manage.py populate -s
+python3 manage.py populate -s -r # -r stands for replace
 ```
 
 # Setup for deployment
@@ -86,10 +86,10 @@ python3 manage.py populate -s
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
-You should populate the database with network, stations and parameters data (static data):
+You should populate the database with network, stations and parameters data (static data, `-s`):
 
 ```bash
-docker exec -it backend python3 manage.py populate -s
+docker exec -it backend python3 manage.py populate -s -r # -r stands for replace
 ```
 
 # Get timeseries data
