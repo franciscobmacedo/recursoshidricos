@@ -105,12 +105,11 @@ def populate_stations(replace: bool) -> None:
 
 def populate_parameters(replace: bool) -> None:
     stations = models.Station.objects.all()
-    session = crawler.BaseCrawler().session
     for index, station in enumerate(stations):
         print_progress_bar(index + 1, stations.count(), prefix="PARAMETERS")
         if not replace and models.PSA.objects.filter(station=station).exists():
             continue
-        populate_station_parameters(station, session)
+        populate_station_parameters(station)
 
 
 def populate_stations_thread() -> None:
