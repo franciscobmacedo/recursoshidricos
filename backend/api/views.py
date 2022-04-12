@@ -5,13 +5,26 @@ from core import schemas, models
 from typing import List
 from pydantic import Field
 from django.db.models import F
+from django.shortcuts import redirect
 
-api = NinjaAPI()
+
+description = """
+💧💧💧 access [SNIRH](https://snirh.apambiente.pt/) data  
 
 
-@api.get("/add")
-def add(request, a: int, b: int):
-    return {"result": a + b}
+[source code](https://github.com/franciscobmacedo/recursoshidricos)
+
+"""
+api = NinjaAPI(
+        title="snirhAPI",
+    description=description,
+    version="0.0.1",
+)
+
+
+@api.get("/", include_in_schema=False)
+def add(request):
+    return redirect("/docs")
 
 
 @api.get("/networks/", response=List[schemas.Network])
