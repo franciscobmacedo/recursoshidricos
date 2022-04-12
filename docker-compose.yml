@@ -25,9 +25,8 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
+    env_file:
+      - .env.dev
     expose:
       - 80
     depends_on:
