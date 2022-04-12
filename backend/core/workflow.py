@@ -1,6 +1,7 @@
 import datetime
 from threading import Thread
 import crawler
+from django.db.models import BooleanField, ExpressionWrapper, Q
 
 from core import schemas, models
 
@@ -135,12 +136,11 @@ def populate_static_data():
     populate_stations()
     populate_parameters()
 
-
 def populate_variable_data(replace):
-    for psa in models.PSA.objects.order_by("last_updated"):
+    for psa in models.PSA.objects.annotate(last_updated_null=ExpressionWrapper(Q(last_updated=None), output_field=BooleanField())).order_by('-last_updated_null', 'last_updated'):
         populate_timeseries_data(psa, replace)
 
-
+ 
 """
 from core.workflow import *
 for s in models.Station.objects.all():
