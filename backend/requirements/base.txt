@@ -8,3 +8,4 @@ django-ninja==0.17.0
 python-environ==0.4.54
 psycopg2-binary==2.8.6
 django-bulk-update-or-create==0.3.0
+whitenoise==5.2.0
