@@ -103,7 +103,7 @@ docker exec -it backend python3 manage.py populate -t -r # -r stands for replace
 to get timeseries data just for the last day:
 
 ```bash
-docker exec -it backend python3 manage.py populate -t # -r stands for replace
+docker exec -it backend python3 manage.py populate -t
 ```
 
 # Crawler
