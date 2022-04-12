@@ -16,7 +16,7 @@ description = """
 
 """
 api = NinjaAPI(
-        title="snirhAPI",
+        title="Recursos Hídricos API",
     description=description,
     version="0.0.1",
 )
