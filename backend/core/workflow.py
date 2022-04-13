@@ -4,7 +4,6 @@ from threading import Thread
 
 import crawler
 from django.db.models import BooleanField, ExpressionWrapper, Q, QuerySet
-
 from core import models
 from crawler.workflow import setup_logs
 from utils import print_progress_bar
@@ -22,7 +21,7 @@ def populate_networks() -> QuerySet[models.Network]:
 
 def populate_network_stations(
     network: models.Network, session=None
-) -> QuerySet[models.Station]:
+) -> list[models.Station]:
     logging.info(f"updating stations for {network}")
     stations = crawler.Stations(session=session, network_uid=network.uid).get()
     uids = [s.uid for s in stations]

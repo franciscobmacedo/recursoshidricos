@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_alter_psa_options'),
+        ("core", "0003_alter_psa_options"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='psa',
-            old_name='last_updated',
-            new_name='data_last_update',
+            model_name="psa",
+            old_name="last_updated",
+            new_name="data_last_update",
         ),
     ]

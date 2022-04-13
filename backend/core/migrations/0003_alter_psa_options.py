@@ -6,12 +6,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0002_psa_last_updated'),
+        ("core", "0002_psa_last_updated"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='psa',
-            options={'verbose_name': 'Parameter Station Assignment', 'verbose_name_plural': 'Parameter Station Assignments'},
+            name="psa",
+            options={
+                "verbose_name": "Parameter Station Assignment",
+                "verbose_name_plural": "Parameter Station Assignments",
+            },
         ),
     ]

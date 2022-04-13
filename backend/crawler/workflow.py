@@ -52,13 +52,14 @@ def setup_logs(filename: str):
     create_logs_dir()
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
     logging.basicConfig(
-        format='%(asctime)s %(levelname)-8s %(message)s',
-         handlers=[
-        logging.FileHandler(os.path.join(LOGS_DIR, f"{filename}_{now}.log")),
-        logging.StreamHandler()
+        format="%(asctime)s %(levelname)-8s %(message)s",
+        handlers=[
+            logging.FileHandler(os.path.join(LOGS_DIR, f"{filename}_{now}.log")),
+            logging.StreamHandler(),
         ],
-        level=logging.DEBUG
+        level=logging.DEBUG,
     )
+
 
 def dump(filename: str, data: Union[list, dict, str]):
     create_data_dir()
