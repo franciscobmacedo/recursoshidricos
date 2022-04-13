@@ -12,7 +12,7 @@ from utils import print_progress_bar
 def populate_networks() -> QuerySet[models.Network]:
     logging.info("updating networks")
     bot = crawler.Networks()
-    networks = bot.get()
+    networks = bot.get_networks()
     items = [models.Network(**network.dict()) for network in networks]
     return models.Network.objects.bulk_update_or_create(
         items, ["nome"], match_field="uid"
@@ -23,7 +23,7 @@ def populate_network_stations(
     network: models.Network, session=None
 ) -> list[models.Station]:
     logging.info(f"updating stations for {network}")
-    stations = crawler.Stations(session=session, network_uid=network.uid).get()
+    stations = crawler.Stations(session=session, network_uid=network.uid).get_stations()
     uids = [s.uid for s in stations]
     existing_uids = models.Station.objects.filter(uid__in=uids).values_list(
         "uid", flat=True
@@ -40,7 +40,7 @@ def populate_station_parameters(station: models.Station, session=None) -> None:
     logging.info(f"updating parameters for {station}")
     parameters = crawler.Parameters(
         session=session, network_uid=station.network.uid
-    ).get(station_uid=station.uid)
+    ).get_parameters(station_uid=station.uid)
     uids = [p.uid for p in parameters]
     existing_uids = models.Parameter.objects.filter(uid__in=uids).values_list(
         "uid", flat=True

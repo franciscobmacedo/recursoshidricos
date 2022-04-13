@@ -21,7 +21,7 @@ class CrawlerTestCase(TestCase):
                 f"https://snirh.apambiente.pt/index.php?idMain=2&idItem=1",
                 text=open_mock_response("home.txt"),
             )
-            networks = crawler.Networks().get()
+            networks = crawler.Networks().get_networks()
 
         self.assertEqual(networks, expected_responses.networks)
 
@@ -43,7 +43,7 @@ class CrawlerTestCase(TestCase):
                 "https://snirh.apambiente.pt/snirh/_dadosbase/site/janela.php?obj_janela=INFO_ESTACOES",
                 text=open_mock_response("stations_detail.txt"),
             )
-            stations = crawler.Stations().get()
+            stations = crawler.Stations().get_stations()
 
         self.assertEqual(stations, expected_responses.stations)
 
@@ -57,7 +57,7 @@ class CrawlerTestCase(TestCase):
                 "https://snirh.apambiente.pt/snirh/_dadosbase/site/_ajax_listaparscomdados.php",
                 text=open_mock_response("parameters.txt"),
             )
-            parameters = crawler.Parameters().get(station_uid="1627743378")
+            parameters = crawler.Parameters().get_parameters(station_uid="1627743378")
 
         self.assertEqual(parameters, expected_responses.parameters)
 

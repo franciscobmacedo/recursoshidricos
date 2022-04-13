@@ -1,6 +1,9 @@
+import logging
 from typing import Optional, Type
 
 import requests
+
+import time
 
 
 class BaseCrawler:
@@ -27,7 +30,7 @@ class BaseCrawler:
         self.data_url = f"{self.BASE_URL}/snirh/_dadosbase/site/janela_verdados.php"
 
         if session:
-            self.session = session
+            self._session = session
         else:
             self.start_session()
 
@@ -36,9 +39,29 @@ class BaseCrawler:
             self.select_network()
 
     def start_session(self):
-        self.session = requests.Session()
-        self.session.get(self.home_url)
+        self._session = requests.Session()
+        self._session.get(self.home_url)
 
     def select_network(self):
         data = {"f_redes_seleccao[]": self.network_uid, "aplicar_filtro": 1}
-        self.session.post(self.home_url, data=data)
+        self.post(self.home_url, data=data)
+
+    def get(self, url, params=None):
+        try:
+            return self._session.get(url, params=params)
+        except requests.exceptions.ConnectionError:
+            logging.error(
+                f"failed to get {url} with params {params}. Will try again in 2 secs.."
+            )
+            time.sleep(2)
+            return self.get(url, params)
+
+    def post(self, url, data):
+        try:
+            return self._session.post(url, data=data)
+        except requests.exceptions.ConnectionError:
+            logging.error(
+                f"failed to post {url} with data {data}. Will try again in 2 secs.."
+            )
+            time.sleep(2)
+            return self.post(url, data)

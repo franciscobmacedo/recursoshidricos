@@ -10,8 +10,8 @@ class Networks(BaseCrawler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def get(self) -> List[Network]:
-        res = self.session.get(self.home_url)
+    def get_networks(self) -> List[Network]:
+        res = self.get(self.home_url)
         soup = BeautifulSoup(res.text, "html.parser")
         networks = soup.find("select", {"name": "f_redes_todas[]"})
         return [

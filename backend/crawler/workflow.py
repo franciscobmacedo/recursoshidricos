@@ -70,7 +70,7 @@ def dump(filename: str, data: Union[list, dict, str]):
 def dump_networks():
     print(f"{bcolors.UNDERLINE}\nFetching networks...\n{bcolors.ENDC}")
     bot = Networks()
-    networks = [n.dict() for n in bot.get()]
+    networks = [n.dict() for n in bot.get_networks()]
     pprint(networks)
     dump(NETWORKS_FILE, networks)
     print(f"\nNetworks dumped to  {bcolors.OKGREEN}{NETWORKS_FILE}\n{bcolors.ENDC}")
@@ -81,7 +81,7 @@ def dump_stations(network_id: str):
         f"\nFetching stations for network {bcolors.OKGREEN}{network_id}{bcolors.ENDC}...\n"
     )
     bot = Stations(network_id=network_id)
-    stations = [s.dict() for s in bot.get()]
+    stations = [s.dict() for s in bot.get_stations()]
     pprint(stations)
     stations_file = STATIONS_FILE.format(network_id=network_id)
     dump(stations_file, stations)
@@ -93,7 +93,7 @@ def dump_parameters(network_id: str, station_id: str):
         f"\nFetching parameters for station {bcolors.OKGREEN}{station_id}{bcolors.ENDC} (from network {bcolors.OKGREEN}{network_id}{bcolors.ENDC})...\n"
     )
     bot = Parameters(network_id=network_id)
-    parameters = [s.dict() for s in bot.get(station_id)]
+    parameters = [s.dict() for s in bot.get_parameters(station_id)]
     parameters_file = PARAMETERS_FILE.format(station_id=station_id)
     pprint(parameters)
     dump(parameters_file, parameters)

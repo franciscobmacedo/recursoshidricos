@@ -16,7 +16,7 @@ class GetData(BaseCrawler):
         tmin: datetime.datetime,
         tmax: datetime.datetime,
     ) -> DataEntryList:
-        res = self.session.get(
+        res = self.get(
             self.data_url,
             params={
                 "sites": station_uid,

@@ -10,7 +10,7 @@ from crawler.networks import Networks
 class Stations(BaseCrawler):
     def get_stations_uids(self):
         """return a dict with station code and uid: {'22E/01UG': '920686062', ... ,'18B/04UG': '920685966'}"""
-        res = self.session.get(self.stations_url)
+        res = self.get(self.stations_url)
         soup = BeautifulSoup(res.text, "html.parser")
         data = {}
         markers = soup.find_all("marker")
@@ -21,7 +21,7 @@ class Stations(BaseCrawler):
                 )
                 data[code] = station["site"]
         else:
-            res = self.session.get(self.home_url)
+            res = self.get(self.home_url)
             soup = BeautifulSoup(res.text, "html.parser")
             stations = soup.find("select", {"name": "f_estacoes[]"})
             for station in stations.find_all("option"):
@@ -31,7 +31,7 @@ class Stations(BaseCrawler):
         return data
 
     def get_stations_details(self):
-        res = self.session.get(self.stations_details_url)
+        res = self.get(self.stations_details_url)
         soup = BeautifulSoup(res.text, "html.parser")
         headers_dom = soup.find("thead").find("tr")
         headers = [h.text for h in headers_dom.find_all("td")]
@@ -44,7 +44,7 @@ class Stations(BaseCrawler):
             data.append(row_data)
         return data
 
-    def get(self) -> List[Station]:
+    def get_stations(self) -> List[Station]:
         uids = self.get_stations_uids()
         stations = self.get_stations_details()
         formatted_stations = []
@@ -101,7 +101,7 @@ class Stations(BaseCrawler):
 
 
 def get_all_stations_states():
-    networks = Networks().get()
+    networks = Networks().get_networks()
     station_states = []
     for network in networks:
         stations = Stations(network_uid=network.uid).get_stations_details()
