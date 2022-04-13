@@ -111,6 +111,9 @@ def populate_parameters(replace: bool) -> None:
     for index, station in enumerate(stations):
         print_progress_bar(index + 1, stations.count(), prefix="PARAMETERS")
         if not replace and models.PSA.objects.filter(station=station).exists():
+            if not station.last_update:
+                station.last_update = datetime.datetime.now()
+                station.save()
             continue
         populate_station_parameters(station)
 
