@@ -1,6 +1,7 @@
 import datetime
 import logging
 import pandas as pd
+import unidecode
 
 
 def parse_datetime(date: str, format="%d-%m-%Y") -> datetime.datetime:
@@ -13,7 +14,9 @@ def date_range(start: datetime.datetime, end: datetime.datetime, freq="M"):
 
 
 # Print iterations progress
-def print_progress_bar(iteration: int, total: int, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█'):
+def print_progress_bar(
+    iteration: int, total: int, prefix="", suffix="", decimals=1, length=100, fill="█"
+):
     """
     Call in a loop to create terminal progress bar
         iteration   - Required  : current iteration (Int)
@@ -27,7 +30,12 @@ def print_progress_bar(iteration: int, total: int, prefix = '', suffix = '', dec
     """
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     filledLength = int(length * iteration // total)
-    bar = fill * filledLength + '-' * (length - filledLength)
-    logging.info(f'\r{prefix} |{bar}| {percent}% {suffix}')
-    if iteration == total: 
-        logging.info('\n')
+    bar = fill * filledLength + "-" * (length - filledLength)
+    logging.info(f"\r{prefix} |{bar}| {percent}% {suffix}")
+    if iteration == total:
+        logging.info("\n")
+
+
+def string_contains_array(string: str, array: list) -> bool:
+    clean_string = unidecode.unidecode(string.lower())
+    return any(x in clean_string for x in array)

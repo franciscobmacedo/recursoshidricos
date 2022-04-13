@@ -1,6 +1,8 @@
-from tabnanny import verbose
+from dataclasses import dataclass
+from typing import Optional
 from django.db import models
 from bulk_update_or_create import BulkUpdateOrCreateQuerySet
+from utils import string_contains_array
 
 
 class Network(models.Model):
@@ -48,9 +50,28 @@ class Station(models.Model):
 
 
 class Parameter(models.Model):
+    @dataclass
+    class FrequencyChoices:
+        HOUR = "HOUR"
+        MINUTE = "MINUTE"
+        DAY = "DAY"
+        MONTH = "MONTH"
+        YEAR = "YEAR"
 
     uid = models.CharField(max_length=200)
     nome = models.CharField(max_length=200)
+
+    @property
+    def frequency(self) -> Optional[str]:
+        if string_contains_array(self.name, ["anual"]):
+            return Parameter.FrequencyChoices.YEAR
+        elif string_contains_array(self.name, ["mensal"]):
+            return Parameter.FrequencyChoices.MONTH
+        elif string_contains_array(self.name, ["diario", "diaria"]):
+            return Parameter.FrequencyChoices.DAY
+        elif string_contains_array(self.name, ["horario", "horaria"]):
+            return Parameter.FrequencyChoices.HOUR
+        return None
 
     def __str__(self) -> str:
         return f"{self.uid} - {self.nome}"
