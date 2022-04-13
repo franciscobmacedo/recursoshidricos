@@ -5,6 +5,26 @@ networks:
     external: false
 
 services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    labels:
+      - traefik.http.routers.vue.rule=Host(`recursoshidricos.pt`)
+      - traefik.http.routers.vue.tls=true
+      - traefik.http.routers.vue.tls.certresolver=lets-encrypt
+      - traefik.port=80
+    networks:
+      - internal
+      - web
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    env_file:
+      - .env
   backend:
     container_name: backend
     build: 
