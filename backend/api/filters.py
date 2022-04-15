@@ -19,8 +19,8 @@ class DataBounds(Schema):
 
 
 class DataFilter(DataBounds):
-    tmin: datetime.date
-    tmax: datetime.date
+    tmin: datetime.date = Field("1950-01-01")
+    tmax: datetime.date = Field(datetime.date.today().strftime("%Y-%m-%d"))
 
 
 class Pagination(PaginationBase):
