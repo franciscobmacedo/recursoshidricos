@@ -193,13 +193,17 @@ def populate_static_data(replace: bool) -> None:
 
 def populate_variable_data(
     replace: bool,
+    network_uid: Optional[str] = None,
     station_uid: Optional[str] = None,
     tmin: Optional[str] = None,
     tmax: Optional[str] = None,
 ) -> None:
     setup_logs("timeseries_data")
+
     if station_uid:
         psas = models.PSA.objects.filter(station__uid=station_uid)
+    elif network_uid:
+        psas = models.PSA.objects.filter(station__network__uid=network_uid)
     else:
         psas = models.PSA.objects.all()
 

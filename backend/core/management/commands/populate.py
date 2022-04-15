@@ -9,6 +9,7 @@ class Command(BaseCommand):
         parser.add_argument("-s", "--static", action="store_true")
         parser.add_argument("-t", "--timeseries", action="store_true")
         parser.add_argument("-r", "--replace", action="store_true")
+        parser.add_argument("-n", "--network_uid", type=str, required=False)
         parser.add_argument("-st", "--station_uid", type=str, required=False)
         parser.add_argument("-tmin", "--tmin", type=str, required=False)
         parser.add_argument("-tmax", "--tmax", type=str, required=False)
@@ -19,6 +20,7 @@ class Command(BaseCommand):
         elif options["timeseries"]:
             populate_variable_data(
                 options["replace"],
+                options["network_uid"],
                 options["station_uid"],
                 options["tmin"],
                 options["tmax"],
