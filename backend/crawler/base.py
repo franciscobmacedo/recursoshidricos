@@ -40,7 +40,7 @@ class BaseCrawler:
 
     def start_session(self):
         self._session = requests.Session()
-        self._session.get(self.home_url)
+        self.get(self.home_url)
 
     def select_network(self):
         data = {"f_redes_seleccao[]": self.network_uid, "aplicar_filtro": 1}
