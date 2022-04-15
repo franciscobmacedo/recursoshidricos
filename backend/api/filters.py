@@ -13,12 +13,19 @@ class ParametersFilter(Schema):
     station_uids: List[str] = Field(None, alias="station_uids")
 
 
-class DataBounds(Schema):
-    station_uids: List[str]
-    parameter_uids: List[str]
+# class DataBounds(Schema):
+#     station_uids: List[str]
+#     parameter_uids: List[str]
 
 
-class DataFilter(DataBounds):
+# class DataFilter(DataBounds):
+#     tmin: datetime.date = Field("1950-01-01")
+#     tmax: datetime.date = Field(datetime.date.today().strftime("%Y-%m-%d"))
+
+
+class DataFilter(Schema):
+    station_uid: str
+    parameter_uid: str
     tmin: datetime.date = Field("1950-01-01")
     tmax: datetime.date = Field(datetime.date.today().strftime("%Y-%m-%d"))
 
