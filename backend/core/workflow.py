@@ -1,12 +1,13 @@
 import datetime
 import logging
 from threading import Thread
+from typing import Optional
 
 import crawler
 from django.db.models import BooleanField, ExpressionWrapper, Q, QuerySet
 from core import models
 from crawler.workflow import setup_logs
-from utils import print_progress_bar
+from utils import print_progress_bar, date_range
 
 
 def populate_networks() -> QuerySet[models.Network]:
@@ -65,36 +66,50 @@ def populate_station_parameters(station: models.Station, session=None) -> None:
     station.save()
 
 
-def populate_timeseries_data(psa: models.PSA, replace: bool) -> None:
+def get_and_update_timeseries_data(
+    psa: models.PSA,
+    tmin: datetime.datetime,
+    tmax: datetime.datetime,
+) -> None:
+    bot = crawler.GetData()
+    data = bot.get_data(psa.station.uid, psa.parameter.uid, tmin=tmin, tmax=tmax)
+    timestamps = [d.timestamp for d in data.__root__]
+    logging.debug(f"\n\ndata has {len(timestamps)} entries\n\n")
+
+    models.Data.objects.filter(psa=psa, timestamp__in=timestamps).delete()
+    items = [models.Data(**d.dict(), psa=psa) for d in data.__root__]
+    models.Data.objects.bulk_create(items)
+    psa.data_last_update = datetime.datetime.now()
+    psa.save()
+
+
+def populate_timeseries_data(
+    psa: models.PSA,
+    replace: bool,
+    tmin: Optional[str] = None,
+    tmax: Optional[str] = None,
+) -> None:
     logging.info(
         f"population data db for parameter {psa.parameter.uid} and station {psa.station.uid} with replace {replace}"
     )
 
-    bot = crawler.GetData()
     now = datetime.datetime.now()
-    logging.DEBUG("before getting data")
-    if replace:
-        data = bot.get_data(
-            psa.station.uid,
-            psa.parameter.uid,
-            tmin=datetime.datetime(1930, 1, 1),
-            tmax=now,
-        )
+    logging.debug("before getting data")
+
+    if tmin:
+        tmin = datetime.datetime.strptime(tmin, "%Y-%m-%d")
+        tmax = datetime.datetime.strptime(tmax, "%Y-%m-%d") if tmax else now
+        d_range = date_range(tmin, tmax, "YS")
+    elif replace:
+        d_range = date_range(datetime.datetime(1930, 1, 1), now, "YS")
+
     else:
-        yesterday = now - datetime.timedelta(days=1)
-        data = bot.get_data(
-            psa.station.uid, psa.parameter.uid, tmin=yesterday, tmax=now
+        return get_and_update_timeseries_data(
+            psa, now - datetime.timedelta(days=1), now
         )
-    logging.DEBUG("after getting data")
-    timestamps = [d.timestamp for d in data.__root__]
-    logging.DEBUG("deleting database")
-    models.Data.objects.filter(psa=psa, timestamp__in=timestamps).delete()
-    logging.DEBUG("creeating instances")
-    items = [models.Data(**d.dict(), psa=psa) for d in data.__root__]
-    logging.DEBUG("filling database")
-    models.Data.objects.bulk_create(items)
-    psa.data_last_update = datetime.datetime.now()
-    psa.save()
+
+    for dates in d_range:
+        get_and_update_timeseries_data(psa, dates[0], dates[1])
 
 
 def populate_stations(replace: bool) -> None:
@@ -175,20 +190,30 @@ def populate_static_data(replace: bool) -> None:
     populate_parameters(replace)
 
 
-def populate_variable_data(replace: bool) -> None:
+def populate_variable_data(
+    replace: bool,
+    station_uid: Optional[str] = None,
+    tmin: Optional[str] = None,
+    tmax: Optional[str] = None,
+) -> None:
     setup_logs("timeseries_data")
-    psas = models.PSA.objects.annotate(
+    if station_uid:
+        psas = models.PSA.objects.filter(station__uid=station_uid)
+    else:
+        psas = models.PSA.objects.all()
+
+    psas = psas.annotate(
         last_update_null=ExpressionWrapper(
             Q(data_last_update=None), output_field=BooleanField()
         )
     ).order_by("-last_update_null", "data_last_update")
     for index, psa in enumerate(psas):
-        logging.DEBUG(f"going to get?, {index}")
+        logging.debug(f"going to get?, {index}")
         print_progress_bar(index + 1, psas.count(), prefix="DATA")
         try:
-            populate_timeseries_data(psa, replace)
+            populate_timeseries_data(psa, replace, tmin, tmax)
         except Exception as e:
-            logging.error(f"failed to update data: {e}")
+            logging.error(f"\n\n\nfailed to update data: {e}")
 
 
 """

@@ -1,16 +1,31 @@
+from typing import Literal, Union
 import datetime
 import logging
 import pandas as pd
 import unidecode
+
+import calendar
 
 
 def parse_datetime(date: str, format="%d-%m-%Y") -> datetime.datetime:
     return datetime.datetime.strptime(date.strip(), format)
 
 
-def date_range(start: datetime.datetime, end: datetime.datetime, freq="M"):
-    dr = pd.date_range(start=start, end=end, freq=freq)
-    return [start] + list(dr.to_pydatetime()) + [end]
+def month_last_day(ts: Union[datetime.datetime, datetime.date]):
+    return calendar.monthrange(ts.year, ts.month)[1]
+
+
+def date_range(
+    start: datetime.datetime, end: datetime.datetime, freq: Literal["MS", "YS"]
+) -> list[list[datetime.datetime, datetime.datetime]]:
+    """returns a list of lists of a month interval. Can be further improved for different freq."""
+    dr = list(pd.date_range(start=start, end=end, freq=freq).to_pydatetime())
+    if dr[-1] != end:
+        dr = dr + [end]
+    if freq == "MS":
+        return [[d, d.replace(day=month_last_day(d))] for d in dr]
+    elif freq == "YS":
+        return [[d, datetime.datetime(d.year, 12, 31)] for d in dr]
 
 
 # Print iterations progress
