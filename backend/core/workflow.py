@@ -72,18 +72,21 @@ def populate_timeseries_data(psa: models.PSA, replace: bool) -> None:
 
     bot = crawler.GetData()
     now = datetime.datetime.now()
-    if replace:
-        data = bot.get_data(
-            psa.station.uid,
-            psa.parameter.uid,
-            tmin=datetime.datetime(1930, 1, 1),
-            tmax=now,
-        )
-    else:
-        yesterday = now - datetime.timedelta(days=1)
-        data = bot.get_data(
-            psa.station.uid, psa.parameter.uid, tmin=yesterday, tmax=now
-        )
+    try:
+        if replace:
+            data = bot.get_data(
+                psa.station.uid,
+                psa.parameter.uid,
+                tmin=datetime.datetime(1930, 1, 1),
+                tmax=now,
+            )
+        else:
+            yesterday = now - datetime.timedelta(days=1)
+            data = bot.get_data(
+                psa.station.uid, psa.parameter.uid, tmin=yesterday, tmax=now
+            )
+    except Exception as e:
+        logging.error(f"failed to fetch data: {e}")
 
     timestamps = [d.timestamp for d in data.__root__]
     models.Data.objects.filter(psa=psa, timestamp__in=timestamps).delete()
