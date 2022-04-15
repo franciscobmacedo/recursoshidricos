@@ -75,7 +75,8 @@ def get_and_update_timeseries_data(
     data = bot.get_data(psa.station.uid, psa.parameter.uid, tmin=tmin, tmax=tmax)
     timestamps = [d.timestamp for d in data.__root__]
     logging.debug(f"\n\ndata has {len(timestamps)} entries\n\n")
-
+    if not timestamps:
+        return
     models.Data.objects.filter(psa=psa, timestamp__in=timestamps).delete()
     items = [models.Data(**d.dict(), psa=psa) for d in data.__root__]
     models.Data.objects.bulk_create(items)
