@@ -72,25 +72,26 @@ def populate_timeseries_data(psa: models.PSA, replace: bool) -> None:
 
     bot = crawler.GetData()
     now = datetime.datetime.now()
-    try:
-        if replace:
-            data = bot.get_data(
-                psa.station.uid,
-                psa.parameter.uid,
-                tmin=datetime.datetime(1930, 1, 1),
-                tmax=now,
-            )
-        else:
-            yesterday = now - datetime.timedelta(days=1)
-            data = bot.get_data(
-                psa.station.uid, psa.parameter.uid, tmin=yesterday, tmax=now
-            )
-    except Exception as e:
-        logging.error(f"failed to fetch data: {e}")
-
+    logging.DEBUG("before getting data")
+    if replace:
+        data = bot.get_data(
+            psa.station.uid,
+            psa.parameter.uid,
+            tmin=datetime.datetime(1930, 1, 1),
+            tmax=now,
+        )
+    else:
+        yesterday = now - datetime.timedelta(days=1)
+        data = bot.get_data(
+            psa.station.uid, psa.parameter.uid, tmin=yesterday, tmax=now
+        )
+    logging.DEBUG("after getting data")
     timestamps = [d.timestamp for d in data.__root__]
+    logging.DEBUG("deleting database")
     models.Data.objects.filter(psa=psa, timestamp__in=timestamps).delete()
+    logging.DEBUG("creeating instances")
     items = [models.Data(**d.dict(), psa=psa) for d in data.__root__]
+    logging.DEBUG("filling database")
     models.Data.objects.bulk_create(items)
     psa.data_last_update = datetime.datetime.now()
     psa.save()
@@ -182,8 +183,12 @@ def populate_variable_data(replace: bool) -> None:
         )
     ).order_by("-last_update_null", "data_last_update")
     for index, psa in enumerate(psas):
+        logging.DEBUG(f"going to get?, {index}")
         print_progress_bar(index + 1, psas.count(), prefix="DATA")
-        populate_timeseries_data(psa, replace)
+        try:
+            populate_timeseries_data(psa, replace)
+        except Exception as e:
+            logging.error(f"failed to update data: {e}")
 
 
 """
