@@ -74,6 +74,8 @@ docker exec -it backend python3 manage.py populate -s -r # -r stands for replace
 
 ## Populate timeseries data
 
+<span style="color:red">**Currently, this functionality is ignored, due to long waiting times. The data is directly fetched from SNIRH**</span>
+
 to get all timeseries data and populate the database run:
 
 ```bash
