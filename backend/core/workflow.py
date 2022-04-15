@@ -1,7 +1,7 @@
 import datetime
 import logging
 from threading import Thread
-from typing import Optional
+from typing import Optional, Literal
 
 import crawler
 from django.db.models import BooleanField, ExpressionWrapper, Q, QuerySet
@@ -89,6 +89,7 @@ def populate_timeseries_data(
     replace: bool,
     tmin: Optional[str] = None,
     tmax: Optional[str] = None,
+    freq: Optional[Literal["MS", "YS"]] = "YS",
 ) -> None:
     logging.info(
         f"population data db for parameter {psa.parameter.uid} and station {psa.station.uid} with replace {replace}"
@@ -100,9 +101,9 @@ def populate_timeseries_data(
     if tmin:
         tmin = datetime.datetime.strptime(tmin, "%Y-%m-%d")
         tmax = datetime.datetime.strptime(tmax, "%Y-%m-%d") if tmax else now
-        d_range = date_range(tmin, tmax, "YS")
+        d_range = date_range(tmin, tmax, freq)
     elif replace:
-        d_range = date_range(datetime.datetime(1930, 1, 1), now, "YS")
+        d_range = date_range(datetime.datetime(1930, 1, 1), now, freq)
 
     else:
         return get_and_update_timeseries_data(
@@ -197,6 +198,7 @@ def populate_variable_data(
     station_uid: Optional[str] = None,
     tmin: Optional[str] = None,
     tmax: Optional[str] = None,
+    freq: Optional[Literal["MS", "YS"]] = "YS",
 ) -> None:
     setup_logs("timeseries_data")
 
@@ -216,7 +218,7 @@ def populate_variable_data(
         logging.debug(f"going to get?, {index}")
         print_progress_bar(index + 1, psas.count(), prefix="DATA")
         try:
-            populate_timeseries_data(psa, replace, tmin, tmax)
+            populate_timeseries_data(psa, replace, tmin, tmax, freq)
         except Exception as e:
             logging.error(f"\n\n\nfailed to update data: {e}")
 

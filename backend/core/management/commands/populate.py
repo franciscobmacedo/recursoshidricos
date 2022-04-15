@@ -13,6 +13,7 @@ class Command(BaseCommand):
         parser.add_argument("-st", "--station_uid", type=str, required=False)
         parser.add_argument("-tmin", "--tmin", type=str, required=False)
         parser.add_argument("-tmax", "--tmax", type=str, required=False)
+        parser.add_argument("-f", "--frequency", type=str, required=False)
 
     def handle(self, *args, **options):
         if options["static"]:
@@ -24,6 +25,7 @@ class Command(BaseCommand):
                 options["station_uid"],
                 options["tmin"],
                 options["tmax"],
+                options["frequency"],
             )
         else:
             print("choose a valid option (-s or -t)")
