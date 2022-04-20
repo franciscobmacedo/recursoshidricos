@@ -36,14 +36,18 @@ class GetData(BaseCrawler):
         date_col = df.columns[0]
         for col in df.columns[1:]:
             df_sp = df.loc[:, [date_col, col]]
+            station = df_sp.iloc[0, 1]
+            parameter = df_sp.iloc[1, 1]
             try:
-                station = Station.objects.get(nome=df_sp.iloc[0, 1]).uid
+                station = Station.objects.get(nome=station.split("(")[0].strip()).uid
             except Station.DoesNotExist:
-                station = df_sp.iloc[0, 1]
+                pass
             try:
-                parameter = Parameter.objects.get(nome=df_sp.iloc[1, 1]).uid
+                parameter = Parameter.objects.get(
+                    nome=parameter.split("(")[0].strip()
+                ).uid
             except Parameter.DoesNotExist:
-                parameter = df_sp.iloc[1, 1]
+                pass
             df_sp["station"] = station
             df_sp["parameter"] = parameter
             df_sp[col] = df_sp[col].replace(r"\s*(.*?)\s*", r"\1", regex=True)
