@@ -23,9 +23,7 @@ services:
       - web
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - VUE_APP_API=api.recursoshidricos.pt
-    env_file:
-      - .env
+      - VUE_APP_API=https://api.recursoshidricos.pt
   backend:
     container_name: backend
     build: 
