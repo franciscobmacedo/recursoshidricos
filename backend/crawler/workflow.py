@@ -18,11 +18,11 @@ LOGS_DIR = "logs"
 
 
 NETWORKS_FILE = os.path.join(DATA_DIR, "networks.json")
-STATIONS_FILE = os.path.join(DATA_DIR, "stations-network_{network_id}.json")
-PARAMETERS_FILE = os.path.join(DATA_DIR, "parameters-station_{station_id}.json")
+STATIONS_FILE = os.path.join(DATA_DIR, "stations-network_{network_uid}.json")
+PARAMETERS_FILE = os.path.join(DATA_DIR, "parameters-station_{station_uid}.json")
 DATA_FILE = os.path.join(
     DATA_DIR,
-    "data-station_{station_id}-parameter_{parameter_id}-tmin_{tmin}-tmax_{tmax}.json",
+    "data-station_{station_uid}-parameter_{parameter_uid}-tmin_{tmin}-tmax_{tmax}.json",
 )
 
 
@@ -76,25 +76,25 @@ def dump_networks():
     print(f"\nNetworks dumped to  {bcolors.OKGREEN}{NETWORKS_FILE}\n{bcolors.ENDC}")
 
 
-def dump_stations(network_id: str):
+def dump_stations(network_uid: str):
     print(
-        f"\nFetching stations for network {bcolors.OKGREEN}{network_id}{bcolors.ENDC}...\n"
+        f"\nFetching stations for network {bcolors.OKGREEN}{network_uid}{bcolors.ENDC}...\n"
     )
-    bot = Stations(network_id=network_id)
+    bot = Stations(network_uid=network_uid)
     stations = [s.dict() for s in bot.get_stations()]
     pprint(stations)
-    stations_file = STATIONS_FILE.format(network_id=network_id)
+    stations_file = STATIONS_FILE.format(network_uid=network_uid)
     dump(stations_file, stations)
     print(f"\n Stations dumped to {bcolors.OKGREEN}{stations_file}\n{bcolors.ENDC}")
 
 
-def dump_parameters(network_id: str, station_id: str):
+def dump_parameters(network_uid: str, station_uid: str):
     print(
-        f"\nFetching parameters for station {bcolors.OKGREEN}{station_id}{bcolors.ENDC} (from network {bcolors.OKGREEN}{network_id}{bcolors.ENDC})...\n"
+        f"\nFetching parameters for station {bcolors.OKGREEN}{station_uid}{bcolors.ENDC} (from network {bcolors.OKGREEN}{network_uid}{bcolors.ENDC})...\n"
     )
-    bot = Parameters(network_id=network_id)
-    parameters = [s.dict() for s in bot.get_parameters(station_id)]
-    parameters_file = PARAMETERS_FILE.format(station_id=station_id)
+    bot = Parameters(network_uid=network_uid)
+    parameters = [s.dict() for s in bot.get_parameters(station_uid)]
+    parameters_file = PARAMETERS_FILE.format(station_uid=station_uid)
     pprint(parameters)
     dump(parameters_file, parameters)
     print(f"\n Parameters dumped to {bcolors.OKGREEN}{parameters_file}\n{bcolors.ENDC}")
@@ -116,7 +116,7 @@ def dump_data(station_uid: str, parameter_uid: str, tmin: str, tmax: str):
         tmax=parse_datetime(tmax, format="%Y-%m-%d"),
     )
     data_file = DATA_FILE.format(
-        station_id=station_uid, parameter_id=parameter_uid, tmin=tmin, tmax=tmax
+        station_uid=station_uid, parameter_uid=parameter_uid, tmin=tmin, tmax=tmax
     )
     dump(data_file, data.json())
     print(f"\n Data dumped to {bcolors.OKGREEN}{data_file}\n{bcolors.ENDC}")
