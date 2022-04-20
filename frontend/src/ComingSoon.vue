@@ -18,8 +18,8 @@ export default {
   name: "App",
   computed: {
     apiUrl() {
-      console.log("process.env.VUE_APP_API", process.env.VUE_APP_API);
-      return process.env.VUE_APP_API;
+      return "https://api.recursoshidricos.pt";
+      // return process.env.VUE_APP_API;
     },
   },
 };
