@@ -9,9 +9,9 @@ from crawler.base import BaseCrawler
 from core.schemas import DataEntryList
 
 
-def get_station_name(station: str):
-    last_par_position = len(station) - station[::-1].index("(") - 1
-    return station[:last_par_position].strip()
+def get_field_name(field: str):
+    last_par_position = len(field) - field[::-1].index("(") - 1
+    return field[:last_par_position].strip()
 
 
 CHUNK_SIZE = 1000
@@ -49,13 +49,11 @@ class GetData(BaseCrawler):
             station = df_sp.iloc[0, 1]
             parameter = df_sp.iloc[1, 1]
             try:
-                station = Station.objects.get(nome=get_station_name(station)).uid
+                station = Station.objects.get(nome=get_field_name(station)).uid
             except Station.DoesNotExist:
                 pass
             try:
-                parameter = Parameter.objects.get(
-                    nome=parameter.split("(")[0].strip()
-                ).uid
+                parameter = Parameter.objects.get(nome=get_field_name(parameter)).uid
             except Parameter.DoesNotExist:
                 pass
             df_sp["station"] = station
