@@ -57,7 +57,9 @@ class CrawlerTestCase(TestCase):
                 "https://snirh.apambiente.pt/snirh/_dadosbase/site/_ajax_listaparscomdados.php",
                 text=open_mock_response("parameters.txt"),
             )
-            parameters = crawler.Parameters().get_parameters(station_uid="1627743378")
+            parameters = crawler.Parameters().get_parameters(
+                station_uids=["1627743378"]
+            )
 
         self.assertEqual(parameters, expected_responses.parameters)
 

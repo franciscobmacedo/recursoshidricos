@@ -41,7 +41,7 @@ def populate_station_parameters(station: models.Station, session=None) -> None:
     logging.info(f"updating parameters for {station}")
     parameters = crawler.Parameters(
         session=session, network_uid=station.network.uid
-    ).get_parameters(station_uid=station.uid)
+    ).get_parameters(station_uids=[station.uid])
     uids = [p.uid for p in parameters]
     existing_uids = models.Parameter.objects.filter(uid__in=uids).values_list(
         "uid", flat=True

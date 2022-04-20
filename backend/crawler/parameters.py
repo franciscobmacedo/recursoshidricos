@@ -7,8 +7,8 @@ from crawler.base import BaseCrawler
 
 
 class Parameters(BaseCrawler):
-    def get_parameters(self, station_uid: str) -> List[Parameter]:
-        res = self.get(self.parameters_url, params={"sites": station_uid})
+    def get_parameters(self, station_uids: list[str]) -> List[Parameter]:
+        res = self.get(self.parameters_url, params={"sites": station_uids})
 
         soup = BeautifulSoup(res.text, "html.parser")
         return [

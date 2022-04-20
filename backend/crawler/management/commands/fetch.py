@@ -27,11 +27,13 @@ class Command(BaseCommand):
                 CrawlerType.data,
             ],
         )
-        self.parser.add_argument("-n", "--network", help="network id", required=False)
-        self.parser.add_argument("-s", "--station", help="station id", required=False)
+        self.parser.add_argument("-n", "--network", help="network uid", required=False)
+        self.parser.add_argument(
+            "-s", "--stations", nargs="+", help="stations uid", required=False
+        )
 
         self.parser.add_argument(
-            "-p", "--parameter", help="parameter id", required=False
+            "-p", "--parameters", nargs="+", help="parameters uid", required=False
         )
         self.parser.add_argument(
             "-f", "--tmin", help="from tmin (format 'yyyy-mm-dd')", required=False
@@ -43,8 +45,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         crawler_type = options["CrawlerType"]
         network = options["network"]
-        station = options["station"]
-        parameter = options["parameter"]
+        stations = options["stations"]
+        parameters = options["parameters"]
         tmin = options["tmin"]
         tmax = options["tmax"]
 
@@ -59,17 +61,17 @@ class Command(BaseCommand):
         elif crawler_type == CrawlerType.parameters:
             if not network:
                 raise CommandError('"network" argument is required')
-            if not station:
-                raise CommandError('"station" argument is required')
-            wf.dump_parameters(network, station)
+            if not stations:
+                raise CommandError('"stations" argument is required')
+            wf.dump_parameters(network, stations)
 
         elif crawler_type == CrawlerType.data:
-            if not station:
-                raise CommandError('"station" argument is required')
-            if not parameter:
-                raise CommandError('"parameter" argument is required')
+            if not stations:
+                raise CommandError('"stations" argument is required')
+            if not parameters:
+                raise CommandError('"parameters" argument is required')
             if not tmin:
                 raise CommandError('"tmin" argument is required')
             if not tmax:
                 raise CommandError('"tmax" argument is required')
-            wf.dump_data(station, parameter, tmin, tmax)
+            wf.dump_data(stations, parameters, tmin, tmax)
