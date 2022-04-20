@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from utils import parse_datetime
 
 from crawler.base import BaseCrawler
+from core.schemas import DataEntryList
 
 
 class GetData(BaseCrawler):
@@ -14,7 +15,7 @@ class GetData(BaseCrawler):
         parameter_uids: list[str],
         tmin: datetime.datetime,
         tmax: datetime.datetime,
-    ) -> list[dict]:
+    ) -> DataEntryList:
         from core.models import Station, Parameter
 
         res = self.get(
@@ -62,4 +63,5 @@ class GetData(BaseCrawler):
         df_formated.value = df_formated.value.apply(
             lambda x: float(x.strip().split(")")[-1].strip())
         )
-        return df_formated.to_dict("records")
+        print(df_formated.to_dict("records"))
+        return DataEntryList(__root__=df_formated.to_dict("records"))
