@@ -96,8 +96,8 @@ def data(request, filters: DataFilter = Query(...)):
     """
     Get timeseries data for one station and one parameter between two dates.
     You need to provide:
-    - **station_uid**: uid of a station
-    - **parameters_uid**: uid of a parameter
+    - **station_uids**: uid(s) of one or more station
+    - **parameters_uids**: uid(s) of one or more parameter
     - **tmin**: start date in yyyy-mm-dd format
     - **tmax**: end date in yyyy-mm-dd format
     """
