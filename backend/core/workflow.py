@@ -223,8 +223,32 @@ def populate_variable_data(
             logging.error(f"\n\n\nfailed to update data: {e}")
 
 
+def populate_variable_data_for_parameter(
+    parameter: models.Parameter,
+) -> None:
+    stations = models.Station.objects.filter(psa__parameter=parameter)
+    bot = crawler.GetData()
+
+    bot.get_data_and_update_db(
+        station_uids=stations.values_list("uid", flat=True),
+        parameter_uid=parameter.uid,
+        tmin=datetime.datetime(1930, 1, 1),
+        tmax=datetime.datetime.now(),
+    )
+
+
+def populate_variable_data_for_all_parameters() -> None:
+    setup_logs("timeseries_data")
+    parameters = models.Parameter.objects.all()
+    for index, parameter in enumerate(parameters):
+        logging.debug(f"going to get?, {index}")
+        print_progress_bar(index + 1, parameters.count(), prefix="DATA")
+        populate_variable_data_for_parameter(parameter)
+
+
 """
 from core.workflow import *
+populate_variable_data_for_parameter(models.Parameter.objects.get(uid="100002982"))
 for s in models.Station.objects.all():
     populate_station_parameters(s)
 """
