@@ -30,7 +30,7 @@ class GetData(BaseCrawler):
         soup = BeautifulSoup(res.text, "html.parser")
         data_table = soup.find_all("table")[-1]
         df = pd.read_html(str(data_table))[0]
-        if df.empty:
+        if df.iloc[2:].empty:
             return []
         df_formated = pd.DataFrame()
         date_col = df.columns[0]
