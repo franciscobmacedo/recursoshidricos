@@ -8,31 +8,32 @@ const instance = axios.create({
 });
 export async function getNetworks() {
   console.log("getting networks");
-  const response = await instance.get("networks");
+  const response = await instance.get("v1/networks");
   return response.data;
 }
 
 export async function getStations(networkID) {
   console.log("getting stations for network: ", networkID);
-  const response = await instance.get(`stations`, {
+  const response = await instance.get("v1/stations", {
     params: {
       network_uid: networkID,
+      page_size: 1000,
     },
   });
 
-  console.log(response.data);
-  return response.data;
+  console.log(response.data.items);
+  return response.data.items;
 }
 
 export async function getParameters(stationIDs = null) {
   return await instance
-    .get("parameters", {
+    .get("v1/parameters", {
       params: {
         station_uids: stationIDs,
       },
     })
     .then((response) => {
-      return response.data;
+      return response.data.items;
     })
     .catch((err) => {
       console.log(err);
@@ -40,7 +41,7 @@ export async function getParameters(stationIDs = null) {
 }
 
 export async function getData(stationID, parameterID, startDate, endDate) {
-  const response = await instance.get("data", {
+  const response = await instance.get("v1/data", {
     params: {
       station_uids: stationID,
       parameter_uids: parameterID,

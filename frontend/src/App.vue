@@ -26,7 +26,7 @@
             ></v-autocomplete>
             <Map />
           </v-col>
-          <v-col>
+          <!-- <v-col>
             <v-row>
               <v-col sm="12" md="8">
                 <Table
@@ -96,7 +96,7 @@
                 </v-btn>
               </v-col>
             </v-row>
-          </v-col>
+          </v-col> -->
         </v-row>
       </v-container>
     </v-main>
@@ -108,14 +108,14 @@ import { mapGetters, mapState } from "vuex";
 import { getNetworks, getData } from "@/api.js";
 import DatePicker from "@/components/DatePicker.vue";
 import Map from "@/components/Map.vue";
-import Table from "@/components/Table.vue";
+// import Table from "@/components/Table.vue";
 
 export default {
   name: "App",
   components: {
     Map,
     DatePicker,
-    Table,
+    // Table,
   },
 
   data: () => ({

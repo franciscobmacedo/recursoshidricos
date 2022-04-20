@@ -88,12 +88,10 @@ export default {
       const options = {
         // position: "topright",
         draw: {
-          polyline: {
-            shapeOptions: {
-              color: "#f357a1",
-              weight: 10,
-            },
-          },
+          polyline: false,
+          marker: false,
+          circlemarker: false,
+
           polygon: {
             allowIntersection: false, // Restricts shapes to simple polygons
             drawError: {
@@ -112,6 +110,8 @@ export default {
         },
         edit: {
           featureGroup: drawnItems,
+          edit: false,
+          remove: false,
         },
       };
 
