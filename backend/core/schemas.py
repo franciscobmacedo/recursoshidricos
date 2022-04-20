@@ -31,7 +31,7 @@ class Network(BaseModel):
         return nome.strip("*").strip(" ")
 
     class Config:
-        schema_extra = {"example": {"id": "920123705", "nome": "Hidrométrica"}}
+        schema_extra = {"example": {"uid": "920123705", "nome": "Hidrométrica"}}
         orm_mode = True
 
 
@@ -79,7 +79,7 @@ class Station(BaseModel):
         use_enum_values = True
         schema_extra = {
             "example": {
-                "id": "1627743378",
+                "uid": "1627743378",
                 "codigo": "19B/01H",
                 "nome": "A-DOS-CUNHADOS",
                 "altitude": "14",
@@ -116,7 +116,7 @@ class Parameter(BaseModel):
 
     class Config:
         orm_mode = True
-        schema_extra = {"example": {"id": "1849", "nome": "Escoamento mensal"}}
+        schema_extra = {"example": {"uid": "1849", "nome": "Escoamento mensal"}}
 
 
 class DataEntry(BaseModel):
