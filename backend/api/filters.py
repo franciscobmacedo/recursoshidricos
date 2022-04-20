@@ -24,8 +24,8 @@ class ParametersFilter(Schema):
 
 
 class DataFilter(Schema):
-    station_uid: str
-    parameter_uid: str
+    station_uids: list[str]
+    parameter_uids: list[str]
     tmin: datetime.date = Field("1950-01-01")
     tmax: datetime.date = Field(datetime.date.today().strftime("%Y-%m-%d"))
 

@@ -135,15 +135,48 @@ class DataEntry(BaseModel):
 
 
 class DataEntryList(BaseModel):
-    __root__: list[DataEntry]
+    __root__: list[dict]
 
     class Config:
         orm_mode = True
         schema_extra = {
             "example": [
-                {"timestamp": "1980-01-01T00:00:00", "value": 851030},
-                {"timestamp": "1980-01-02T00:00:00", "value": 631010},
-                {"timestamp": "1980-01-03T00:00:00", "value": 231010},
+                {
+                    "timestamp": "1932-10-01T09:00:00",
+                    "value": 2070.9,
+                    "station": "920752570",
+                    "parameter": "4237",
+                },
+                {
+                    "timestamp": "1933-10-01T09:00:00",
+                    "value": 1614.1,
+                    "station": "920752570",
+                    "parameter": "4237",
+                },
+                {
+                    "timestamp": "1934-10-01T09:00:00",
+                    "value": 1674.7,
+                    "station": "920752570",
+                    "parameter": "4237",
+                },
+                {
+                    "timestamp": "1982-12-01T09:00:00",
+                    "value": 71.6,
+                    "station": "920752670",
+                    "parameter": "1436794570",
+                },
+                {
+                    "timestamp": "1983-01-01T09:00:00",
+                    "value": 4.5,
+                    "station": "920752670",
+                    "parameter": "1436794570",
+                },
+                {
+                    "timestamp": "1983-02-01T09:00:00",
+                    "value": 56.0,
+                    "station": "920752670",
+                    "parameter": "1436794570",
+                },
             ]
         }
 

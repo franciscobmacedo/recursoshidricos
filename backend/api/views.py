@@ -103,8 +103,8 @@ def data(request, filters: DataFilter = Query(...)):
     """
     bot = GetData()
     return bot.get_data(
-        filters.station_uid,
-        filters.parameter_uid,
+        filters.station_uids,
+        filters.parameter_uids,
         tmin=filters.tmin,
         tmax=filters.tmax,
     )
