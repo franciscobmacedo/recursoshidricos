@@ -131,7 +131,7 @@ Get all parameters of the station 1627758916 inside the network 920123705 - writ
 python3 manage.py fetch parameters -n 920123705 -s 1627758916
 ```
 
-Get data for parameter 1849 of the station 1627758916 between 1980-01-01 and 2020-12-31 - writes it in `data/data-station_1627758916-parameter_1849-tmin_1980-01-01-tmax_2020-12-31`
+Get data for parameter 1849 of the station 1627758916 between 1980-01-01 and 2020-12-31 - writes it in `data/data-station_1627758916-parameter_1849-tmin_1980-01-01-tmax_2020-12-31.json`
 
 ```
 python3 manage.py fetch data -s 1627758916 -p 1849 -f 1980-01-01 -t 2020-12-31
