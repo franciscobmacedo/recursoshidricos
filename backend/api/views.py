@@ -94,7 +94,7 @@ def parameter(request, parameter_uid: str):
 )
 def data(request, filters: DataFilter = Query(...)):
     """
-    Get timeseries data for one station and one parameter between two dates.
+    Get timeseries data for one or more stations and one or more parameters between two dates.
     You need to provide:
     - **station_uids**: uid(s) of one or more station
     - **parameters_uids**: uid(s) of one or more parameter
