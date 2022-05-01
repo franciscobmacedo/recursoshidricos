@@ -26,8 +26,8 @@ class ParametersFilter(Schema):
 class DataFilter(Schema):
     station_uids: list[str]
     parameter_uids: list[str]
-    tmin: datetime.date = Field("1950-01-01")
-    tmax: datetime.date = Field(datetime.date.today().strftime("%Y-%m-%d"))
+    tmin: datetime.date = Field(datetime.date(1950, 1, 1))
+    tmax: datetime.date = Field(datetime.date.today())
 
 
 class Pagination(PaginationBase):

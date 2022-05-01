@@ -22,8 +22,8 @@ class GetData(BaseCrawler):
         self,
         station_uids: list[str],
         parameter_uids: list[str],
-        tmin: datetime.datetime,
-        tmax: datetime.datetime,
+        tmin: datetime.date,
+        tmax: datetime.date,
     ) -> DataEntryList:
         from core.models import Station, Parameter
 

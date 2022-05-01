@@ -76,8 +76,8 @@ class CrawlerTestCase(TestCase):
             )
             response = crawler.GetData().get_data(
                 station_uids=["1627743378"],
-                tmin=datetime.datetime(1980, 1, 1),
-                tmax=datetime.datetime(1980, 6, 1),
+                tmin=datetime.date(1980, 1, 1),
+                tmax=datetime.date(1980, 6, 1),
                 parameter_uids=["1849"],
             )
 
