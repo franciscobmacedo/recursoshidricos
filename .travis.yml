@@ -6,5 +6,6 @@ python:
 install:
   - pip install -r backend/requirements/dev.txt
 # command to run tests
+before_script: cd backend
 script:
-  - pytest
+  - python3 manage.py test
