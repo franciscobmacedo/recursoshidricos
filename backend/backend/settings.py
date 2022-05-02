@@ -84,12 +84,12 @@ import os
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_SERVER"),
-        "PORT": os.environ.get("POSTGRES_PORT"),
+        "ENGINE": os.environ.get("ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("POSTGRES_DB", os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": os.environ.get("POSTGRES_USER", None),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", None),
+        "HOST": os.environ.get("POSTGRES_SERVER", None),
+        "PORT": os.environ.get("POSTGRES_PORT", None),
     }
 }
 import sys
