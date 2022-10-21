@@ -1,7 +1,7 @@
 # :sweat_drops: Recursos Hídricos
 
 Transformation of [SNIRH](https://snirh.apambiente.pt/) platform data into an accessible RESTFull API.  
-Live at https://recursoshidricos.frmac.pt
+:warning: **CURRENTLY NOT LIVE**
 
 ## Table of Contents
 
